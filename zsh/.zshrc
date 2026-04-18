@@ -45,6 +45,9 @@ setopt HIST_SAVE_NO_DUPS        # Schrijf geen duplicaten naar het history-besta
 setopt HIST_REDUCE_BLANKS       # Verwijder overbodige spaties voor opslaan
 setopt HIST_FCNTL_LOCK          # Gebruik bestandsvergrendeling bij schrijven naar history
 
+# Deduplicate PATH entries
+typeset -U PATH
+
 # =============================================================================
 # Oh-my-zsh libraries
 # =============================================================================
