@@ -1,18 +1,60 @@
 #!/bin/zsh
 
-export TZ='Europe/Amsterdam';
-
-export GEM_HOME="$HOME/.gem"
-
+# =============================================================================
+# Locale & timezone
+# =============================================================================
+export TZ='Europe/Amsterdam'
 export LANG="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
+
+# =============================================================================
+# Editor
+# =============================================================================
 export EDITOR="nano"
 
-export GOROOT="$(brew --prefix go)/libexec"
-export GOPATH=$HOME/Projects/golang
-export GOBIN=$GOPATH/bin
-
-export PATH="/usr/local/bin:/usr/local/sbin:$(brew --prefix coreutils)/libexec/gnubin:$GOBIN:$PATH"
-export FZF_PATH="$(brew --prefix fzf)"
-
+# =============================================================================
+# Dotfiles
+# =============================================================================
 export DOTFILES="$HOME/Projects/system/dotfiles"
+
+# =============================================================================
+# Go
+# =============================================================================
+export GOPATH="$HOME/Projects/golang"
+export GOBIN="$GOPATH/bin"
+export PATH="$GOBIN:$PATH"
+
+# Let go determine its own root
+command -v go &>/dev/null && export GOROOT="$(go env GOROOT 2>/dev/null)"
+
+# =============================================================================
+# Ruby
+# =============================================================================
+export GEM_HOME="$HOME/.gem"
+
+# =============================================================================
+# fzf – find path across package managers
+# =============================================================================
+for _fzf_path in \
+  "$(brew --prefix fzf 2>/dev/null)" \
+  /usr/share/fzf \
+  /usr/share/doc/fzf \
+  /usr/local/share/fzf; do
+  if [[ -d "$_fzf_path" ]]; then
+    export FZF_PATH="$_fzf_path"
+    break
+  fi
+done
+unset _fzf_path
+
+# =============================================================================
+# PATH additions – platform aware
+# =============================================================================
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+
+if [[ "$OSTYPE" == darwin* ]] && command -v brew &>/dev/null; then
+  # macOS – coreutils via Homebrew
+  _coreutils="$(brew --prefix coreutils 2>/dev/null)/libexec/gnubin"
+  [[ -d "$_coreutils" ]] && export PATH="$_coreutils:$PATH"
+  unset _coreutils
+fi
