@@ -1,0 +1,35 @@
+# Development tools
+# Install with: brew bundle --file=install/Brewfile.dev
+
+# Languages & runtimes
+brew "go"
+brew "golangci-lint"
+brew "deno"
+brew "rbenv"
+brew "ruby-build"
+brew "yarn"
+# LTS versies: 17, 21, 29 (2027)
+brew "openjdk@21"
+
+# Infrastructure
+brew "terraform"
+brew "docker"
+brew "docker-completion"
+brew "docker-slim"
+brew "kubernetes-cli"
+brew "kubectx"
+
+# Database
+#brew "postgresql@17"
+
+# Testing & debugging
+brew "testssl"
+brew "wrk"
+brew "asciinema"
+brew "plantuml"
+brew "protobuf"
+
+# Apps
+cask "postman"
+cask "charles"
+cask "ngrok"
