@@ -8,14 +8,14 @@ brew "deno"
 brew "rbenv"
 brew "ruby-build"
 brew "yarn"
-# LTS versies: 17, 21, 29 (2027)
+
+# LTS: 17, 21, 29 (2027)
 brew "openjdk@21"
 
 # Infrastructure
 brew "terraform"
 brew "docker"
 brew "docker-completion"
-brew "docker-slim"
 brew "kubernetes-cli"
 brew "kubectx"
 
