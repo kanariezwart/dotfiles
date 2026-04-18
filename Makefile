@@ -23,3 +23,10 @@ unstow:
 update:
 	git pull
 	$(MAKE) stow
+test:
+	@echo "Simulating stow..."
+	@for package in $(PACKAGES); do \
+		echo "Testing $$package..."; \
+		stow --simulate --target=$(HOME) $$package; \
+	done
+	@echo "All packages OK!"
