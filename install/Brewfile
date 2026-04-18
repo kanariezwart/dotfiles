@@ -1,0 +1,64 @@
+# Taps
+tap "homebrew/cask-fonts"
+
+# Shell
+brew "coreutils"
+brew "stow"
+brew "zsh"
+brew "fzf"
+brew "vivid"
+brew "git"
+brew "git-extras"
+brew "git-filter-repo"
+
+# Terminal tools
+brew "nano"
+brew "nanorc"
+brew "htop"
+brew "tree"
+brew "watch"
+brew "wget"
+brew "httpie"
+brew "jq"
+brew "rename"
+brew "tmux"
+brew "fortune"
+
+# Security
+brew "gnupg"
+brew "pinentry-mac"
+
+# Fonts
+cask "font-meslo-lg-nerd-font"
+
+# Browsers
+cask "firefox"
+cask "brave-browser"
+
+# Communication
+cask "signal"
+cask "slack"
+
+# Productivity
+cask "flycut"
+cask "the-unarchiver"
+cask "bitwarden"
+cask "cleanmymac"
+
+# Media
+cask "vlc"
+cask "spotify"
+
+# Network
+cask "tunnelblick"
+cask "transmission"
+
+# Development
+cask "iterm2"
+cask "postman"
+
+# Utilities
+cask "coconutbattery"
+cask "dupeguru"
+cask "suspicious-package"
+cask "apparency"
