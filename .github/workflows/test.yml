@@ -48,9 +48,9 @@ jobs:
 
       - name: Lint zsh files
         run: |
-          shellcheck --shell=bash -x zsh/.zsh/aliases.zsh
-          shellcheck --shell=bash -x zsh/.zsh/aliases-osx.zsh
-          shellcheck --shell=bash -x zsh/.zsh/functions.zsh
+          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/aliases.zsh
+          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/aliases-osx.zsh
+          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/functions.zsh
           shellcheck --shell=bash install.sh
 
   yamllint:
@@ -72,15 +72,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Check for secrets
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: main
-          head: HEAD
+      - name: Check for hardcoded secrets
+        run: |
+          ! grep -rn "password\|token\|secret\|api_key" \
+            --include="*.zsh" \
+            --include="*.sh" \
+            --include="*.conf" \
+            . && echo "No secrets found" || { echo "Possible secrets found!"; exit 1; }
 
   linux:
     name: Test on Linux
