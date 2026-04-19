@@ -3,29 +3,29 @@
 # Simple calculator
 function calc() {
   local result=""
-  result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+  result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
   #                       └─ default (when `--mathlib` is used) is 20
   #
   if [[ "$result" == *.* ]]; then
     # improve the output for decimal numbers
-    printf "$result" |
+    printf '%s' "$result" |
     sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
         -e 's/^-\./-0./'      `# add "0" for cases like "-.5"` \
         -e 's/0*$//;s/\.$//'   # remove trailing zeros
   else
-    printf "$result"
+    printf '%s' "$result"
   fi
   printf "\n"
 }
 
 # Create a new directory and enter it
 function mkd() {
-  mkdir -p "$@" && cd "$@"
+  mkdir -p "$@" && cd "$@" || return 1
 }
 
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 function targz() {
-  local tmpFile="${@%/}.tar"
+  local tmpFile="${*%/}.tar"
   tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1
 
   local size
@@ -61,14 +61,16 @@ function digga() {
 
 # UTF-8-encode a string of Unicode symbols
 function escape() {
-  printf "\\\x%s" $(printf "$@" | xxd -p -c1 -u)
+  # shellcheck disable=SC2046
+  printf "\\\x%s" $(printf '%s' "$@" | xxd -p -c1 -u)
   # print a newline unless we're piping the output to another program
   if [ -t 1 ]; then
     echo "" # newline
   fi
 }
 
-# Show all the names (CNs and SANs) listed in the SSL certificate for a given domain
+# Show all the names (CNs and SANs) listed in the SSL certificate
+# for a given domain
 function getcertnames() {
   if [ -z "${1}" ]; then
     echo "ERROR: No domain specified."
@@ -105,7 +107,7 @@ function getcertnames() {
 function update_zcomet() {
   zcomet self-update
   zcomet update
-  reload
+  exec zsh
 }
 
 # Update Homebrew and all packages (macOS only)
@@ -124,4 +126,13 @@ function update() {
     update_brew
   fi
   update_zcomet
+}
+
+# Get public IP or resolve a domain
+function ip() {
+  if [[ -n "$1" ]]; then
+    dig +short "$1" | tail -n 1
+  else
+    curl -s ipinfo.io/ip && echo
+  fi
 }
