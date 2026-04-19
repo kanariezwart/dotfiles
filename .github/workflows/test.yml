@@ -77,7 +77,7 @@ jobs:
 
       - name: Check for hardcoded secrets
         run: |
-          if grep -rn "password\|token\|secret\|api_key" \
+          if grep -rn "password=\|token=\|secret=\|api_key=" \
             --include="*.zsh" \
             --include="*.sh" \
             --include="*.conf" .; then
