@@ -1,0 +1,33 @@
+name: Test dotfiles
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  stow:
+    name: Test stow packages
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install stow
+        run: brew install stow
+
+      - name: Test stow packages
+        run: make test
+
+  brewfile:
+    name: Validate Brewfile
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Brewfile
+        run: brew bundle check --file=install/Brewfile --no-upgrade
