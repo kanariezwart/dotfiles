@@ -33,9 +33,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add taps
-        run: brew tap homebrew/cask-fonts
-
       - name: Validate Brewfile syntax
         run: |
           brew bundle list --file=install/Brewfile
