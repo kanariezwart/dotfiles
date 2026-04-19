@@ -41,3 +41,6 @@ test: ## Simulate stow without modifying filesystem
 
 iterm: ## Import iTerm2 configuration
 	defaults import com.googlecode.iterm2 $(DOTFILES)/iterm2/com.googlecode.iterm2.plist
+
+macos: ## Apply macOS system defaults
+	bash install/macos.sh
