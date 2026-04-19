@@ -1,3 +1,4 @@
+---
 name: Test dotfiles
 
 on:
@@ -5,7 +6,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: true
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -48,10 +49,11 @@ jobs:
 
       - name: Lint zsh files
         run: |
-          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/aliases.zsh
-          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/aliases-osx.zsh
-          shellcheck --shell=bash -x --exclude=SC1091 zsh/.zsh/functions.zsh
-          shellcheck --shell=bash install.sh
+          shellcheck --shell=bash -x --exclude=SC1091 \
+            zsh/.zsh/aliases.zsh \
+            zsh/.zsh/aliases-osx.zsh \
+            zsh/.zsh/functions.zsh \
+            install.sh
 
   yamllint:
     name: Lint YAML files
@@ -75,11 +77,14 @@ jobs:
 
       - name: Check for hardcoded secrets
         run: |
-          ! grep -rn "password\|token\|secret\|api_key" \
+          if grep -rn "password\|token\|secret\|api_key" \
             --include="*.zsh" \
             --include="*.sh" \
-            --include="*.conf" \
-            . && echo "No secrets found" || { echo "Possible secrets found!"; exit 1; }
+            --include="*.conf" .; then
+            echo "Possible secrets found!"
+            exit 1
+          fi
+          echo "No secrets found"
 
   linux:
     name: Test on Linux
