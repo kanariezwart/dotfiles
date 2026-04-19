@@ -58,6 +58,5 @@ cask "postman"
 
 # Utilities
 cask "coconutbattery"
-cask "dupeguru"
 cask "suspicious-package"
 cask "apparency"
