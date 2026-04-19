@@ -48,9 +48,9 @@ jobs:
 
       - name: Lint zsh files
         run: |
-          shellcheck --shell=bash zsh/.zsh/aliases.zsh
-          shellcheck --shell=bash zsh/.zsh/aliases-osx.zsh
-          shellcheck --shell=bash zsh/.zsh/functions.zsh
+          shellcheck --shell=bash -x zsh/.zsh/aliases.zsh
+          shellcheck --shell=bash -x zsh/.zsh/aliases-osx.zsh
+          shellcheck --shell=bash -x zsh/.zsh/functions.zsh
           shellcheck --shell=bash install.sh
 
   yamllint:
