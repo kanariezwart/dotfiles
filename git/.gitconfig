@@ -21,6 +21,7 @@
 [core]
   editor     = nano
   autocrlf   = input
+  pager      = delta
 
 [credential]
   helper = osxkeychain
@@ -39,34 +40,19 @@
   stash                    = 8 normal
   branch                   = 14 normal
 
-[color "diff"]
-  whitespace               = normal reverse
-  commit                   = 3 normal
-  func                     = normal
-  newMoved                 = 14 normal
-  oldMovedAlternativeDimmed = 4 normal dim
-  frag                     = 3 normal ul
-  oldMovedAlternative      = 12 normal dim
-  contextBold              = normal bold
-  newBold                  = 10 normal bold
-  context                  = normal
-  oldMoved                 = 14 normal dim
-  oldBold                  = 9 normal dim bold
-  newMovedDimmed           = 6 normal
-  meta                     = 3 normal
-  newDimmed                = 2 normal
-  newMovedAlternative      = 12 normal
-  new                      = 10 normal
-  newMovedAlternativeDimmed = 4 normal
-  oldMovedDimmed           = 6 normal dim
-  oldDimmed                = 1 normal dim
-  old                      = 9 normal dim
+[delta]
+  syntax-theme = Solarized (dark)
+  navigate = true
+  line-numbers = true
 
 [color "grep"]
   filename   = 7 normal
   function   = 10 normal
   column     = 8 normal
   linenumber = 8 normal
+
+[interactive]
+  diffFilter = delta --color-only
 
 [color "interactive"]
   header     = 8 normal bold
