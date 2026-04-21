@@ -6,13 +6,22 @@ Personal dotfiles for macOS, managed with [GNU Stow](https://www.gnu.org/softwar
 
 ```
 dotfiles/
-├── git/        # .gitconfig, .gitconfig.local, .gitignore_global
-├── shell/      # .shell_env
-├── zsh/        # .zshrc, .zsh/aliases.zsh, .zsh/functions.zsh, .p10k.zsh
+├── git/            # .gitconfig, .gitconfig.local, .gitignore_global
+├── shell/          # .shell_env
+├── zsh/            # .zshrc, .zsh/aliases.zsh, .zsh/functions.zsh, .p10k.zsh
+├── iterm2/         # iTerm2 configuration
 ├── install/
-│   ├── Brewfile      # base packages and apps
-│   └── Brewfile.dev  # development tools
-├── install.sh  # bootstrap script for new machines
+│   ├── Brewfile          # base packages and apps
+│   ├── Brewfile.dev      # general development tools
+│   ├── Brewfile.go       # Go tools
+│   ├── Brewfile.php      # PHP tools
+│   ├── Brewfile.ruby     # Ruby tools
+│   ├── Brewfile.python   # Python tools
+│   ├── Brewfile.java     # Java tools
+│   ├── Brewfile.infra    # infrastructure tools
+│   ├── Brewfile.apps.dev # development apps
+│   └── macos.sh          # macOS system defaults
+├── install.sh      # bootstrap script for new machines
 └── Makefile
 ```
 
@@ -36,6 +45,7 @@ This will:
 3. Clone this repo to `~/Projects/system/dotfiles` (or custom path)
 4. Install all packages from `install/Brewfile`
 5. Symlink all dotfiles to `~` via Stow
+6. Run one-time setup (SSH, screenshots, solarized, macOS defaults, iTerm2)
 
 ## Manual install
 
@@ -49,12 +59,26 @@ make install
 
 | Command | Description |
 |---|---|
-| `make install` | Install brew packages and create all symlinks |
-| `make brew` | Install base packages from Brewfile only |
-| `make dev` | Install development tools from Brewfile.dev |
+| `make install` | Full install: brew packages, symlinks and one-time setup |
+| `make brew` | Install base packages from Brewfile |
+| `make dev` | Install all development tools |
+| `make dev-go` | Install Go tools |
+| `make dev-php` | Install PHP tools |
+| `make dev-ruby` | Install Ruby tools |
+| `make dev-python` | Install Python tools |
+| `make dev-java` | Install Java tools |
+| `make dev-infra` | Install infrastructure tools |
+| `make dev-apps` | Install development apps |
 | `make stow` | Create symlinks only |
 | `make unstow` | Remove all symlinks |
+| `make test` | Simulate stow without modifying filesystem |
 | `make update` | Pull latest changes and restow |
+| `make setup` | Run all one-time setup tasks |
+| `make defaults` | Apply macOS system defaults |
+| `make iterm` | Import iTerm2 configuration |
+| `make solarized` | Setup solarized dircolors |
+| `make ssh` | Create SSH directory and config.local template |
+| `make screenshots` | Create Screenshots directory |
 
 ## Stow packages
 
@@ -80,6 +104,8 @@ Template:
 [github]
   user = your-username
 ```
+
+SSH host definitions go in `~/.ssh/config.local` — also excluded from the repo. A template is created automatically by `make ssh`.
 
 ## Environment variable
 
