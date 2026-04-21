@@ -9,6 +9,7 @@ brew "vivid"
 brew "git"
 brew "git-extras"
 brew "git-filter-repo"
+brew "git-delta"
 
 # Terminal tools
 brew "nano"

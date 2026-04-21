@@ -3,14 +3,21 @@
 
 # Languages & runtimes
 brew "go"
+brew "protobuf"
 brew "golangci-lint"
-brew "deno"
+
+
 brew "rbenv"
-brew "ruby-build"
 brew "yarn"
 
+# php
+brew "php"
+brew "composer"
+
+# java
 # LTS: 17, 21, 29 (2027)
 brew "openjdk@21"
+brew "jenv"
 
 # Infrastructure
 brew "terraform"
@@ -19,15 +26,11 @@ brew "docker-completion"
 brew "kubernetes-cli"
 brew "kubectx"
 
-# Database
-#brew "postgresql@17"
-
 # Testing & debugging
 brew "testssl"
 brew "wrk"
 brew "asciinema"
 brew "plantuml"
-brew "protobuf"
 
 # Apps
 cask "postman"
