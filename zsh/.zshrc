@@ -103,10 +103,13 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -1 --color=always $realpath'
 
 # fzf – must be before syntax-highlighting
 zcomet load aloxaf/fzf-tab
-zcomet load unixorn/fzf-zsh-plugin
+
+# fzf key bindings and completions
+[[ -f "$FZF_PATH/shell/key-bindings.zsh" ]] && source "$FZF_PATH/shell/key-bindings.zsh"
+[[ -f "$FZF_PATH/shell/completion.zsh" ]] && source "$FZF_PATH/shell/completion.zsh"
 
 # zsh-syntax-highlighting ALWAYS last plugin
-zcomet load zsh-users/zsh-syntax-highlighting
+zcomet load zdharma-continuum/fast-syntax-highlighting
 
 # =============================================================================
 # LS_COLORS & completion colors
