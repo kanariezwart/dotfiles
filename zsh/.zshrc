@@ -1,12 +1,11 @@
 #!/bin/zsh
-
 # =============================================================================
 # P10k instant prompt – must be first
 # =============================================================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
+zmodload zsh/zprof
 # =============================================================================
 # Environment
 # =============================================================================
@@ -60,7 +59,6 @@ zcomet load ohmyzsh lib/correction.zsh
 zcomet load ohmyzsh lib/completion.zsh
 zcomet load ohmyzsh lib/compfix.zsh
 zcomet load ohmyzsh lib/clipboard.zsh
-zcomet load ohmyzsh lib/grep.zsh
 zcomet load ohmyzsh lib/key-bindings.zsh
 zcomet load ohmyzsh lib/termsupport.zsh
 
@@ -69,23 +67,24 @@ zcomet load ohmyzsh lib/termsupport.zsh
 # =============================================================================
 zcomet load ohmyzsh plugins/encode64
 zcomet load ohmyzsh plugins/extract
-zcomet load ohmyzsh plugins/gcloud
 zcomet load ohmyzsh plugins/gitfast
-zcomet load ohmyzsh plugins/golang
-zcomet load ohmyzsh plugins/httpie
+
+# =============================================================================
+# Oh-my-zsh plugins lazy load
+# =============================================================================
+zcomet trigger gcloud ohmyzsh plugins/gcloud
+zcomet trigger go ohmyzsh plugins/golang
+zcomet trigger http ohmyzsh plugins/httpie
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
-zcomet load ohmyzsh plugins/ssh-agent
-zcomet load ohmyzsh plugins/gpg-agent
+zcomet trigger ssh-add ohmyzsh plugins/ssh-agent
+zcomet trigger gpg ohmyzsh plugins/gpg-agent
 
 [[ "$OSTYPE" == darwin* ]] && zcomet load ohmyzsh plugins/macos
 
 # =============================================================================
 # Other plugins
 # =============================================================================
-
-# Solarized dircolors
-zcomet load joel-porquet/zsh-dircolors-solarized
 
 # Colored man pages
 zcomet load ael-code/zsh-colored-man-pages
