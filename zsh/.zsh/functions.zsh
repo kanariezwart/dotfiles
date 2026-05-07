@@ -136,3 +136,40 @@ function ip() {
     curl -s ipinfo.io/ip && echo
   fi
 }
+
+battery() {
+  local raw percent state time_left
+  raw=$(pmset -g batt)
+  percent=$(echo "$raw" | grep -o '[0-9]*%' | head -1 | tr -d '%')
+  state=$(echo "$raw"   | awk 'NR==2 {gsub(/;/,""); print $4}')
+  time_left=$(echo "$raw" | awk 'NR==2 {gsub(/;/,""); print $5}')
+
+  [[ -z "$percent" ]] && { print "Battery info unavailable"; return 1; }
+
+  local ioreg watts charger_v charger_a charger_line
+  ioreg=$(ioreg -rc AppleSmartBattery)
+  charger_line=$(echo "$ioreg" | grep '"ChargerData"')
+  charger_v=$(echo "$charger_line" | grep -o '"ChargingVoltage"=[0-9]*' | grep -o '[0-9]*$')
+  charger_a=$(echo "$charger_line" | grep -o '"ChargingCurrent"=[0-9]*'  | grep -o '[0-9]*$')
+
+  if [[ -n "$charger_v" && -n "$charger_a" && "$charger_a" != "0" ]]; then
+    watts=$(awk "BEGIN {printf \"%.0f\", ($charger_v * $charger_a) / 1000000}")
+  else
+    watts="?"
+  fi
+
+  local color
+  if   (( percent > 60 )); then color="%F{green}"
+  elif (( percent > 20 )); then color="%F{yellow}"
+  else                          color="%F{red}"
+  fi
+
+  local bar="" i bar_width=30
+  local filled=$(( percent * bar_width / 100 ))
+  local empty=$(( bar_width - filled ))
+  for (( i = 0; i < filled; i++ )); do bar+="${color}▄%f"; done
+  for (( i = 0; i < empty;  i++ )); do bar+="%F{black}▄%f"; done
+
+  print -P "${color}● ${percent}%%%f  ──  ${state}  ──  %F{blue}${time_left}%f  ──  %F{cyan}${watts}W%f"
+  print -P "$bar"
+}
