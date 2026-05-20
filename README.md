@@ -135,10 +135,8 @@ update_zcomet
 
 ## Requirements
 
-- macOS
+- macOS 10.x
 - Zsh
 - [Homebrew](https://brew.sh)
 - [GNU Stow](https://www.gnu.org/software/stow/) (`brew install stow`)
 
-
-# zsh-bench
