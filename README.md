@@ -141,3 +141,4 @@ update_zcomet
 - [GNU Stow](https://www.gnu.org/software/stow/) (`brew install stow`)
 
 
+# zsh-bench
