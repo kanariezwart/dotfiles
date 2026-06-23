@@ -113,7 +113,7 @@ function update_zcomet() {
 # Update Homebrew and all packages (macOS only)
 function update_brew() {
   brew update \
-    && brew upgrade \
+    && brew upgrade -y \
     && brew cu -avyf \
     && brew cleanup \
     && brew autoremove
@@ -121,6 +121,10 @@ function update_brew() {
 
 # Full system update: macOS software + brew + zcomet
 function update() {
+  # request sudo upfront and keep it alive
+  sudo -v
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+  
   if [[ "$(uname)" == "Darwin" ]]; then
     sudo softwareupdate -i -a
     update_brew
