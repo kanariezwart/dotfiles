@@ -85,8 +85,7 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 # Screenshots
 # =============================================================================
 
-# Save screenshots to Downloads
-defaults write com.apple.screencapture location -string "$HOME/Screenshots"
+# Location (~/Screenshots) is set by `make screenshots`
 
 # Save screenshots as PNG
 defaults write com.apple.screencapture type -string "png"
