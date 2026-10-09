@@ -68,23 +68,72 @@ jobs:
       - name: Lint YAML
         run: yamllint .github/workflows/
 
-  secrets:
-    name: Check for secrets
+  zsh-syntax:
+    name: Check zsh syntax
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check for hardcoded secrets
+      - name: Install zsh
+        run: sudo apt-get install -y zsh
+
+      # shellcheck only understands bash; zsh -n parses actual zsh syntax
+      - name: zsh -n
         run: |
-          if grep -rn "password=\|token=\|secret=\|api_key=" \
-            --include="*.zsh" \
-            --include="*.sh" \
-            --include="*.conf" .; then
-            echo "Possible secrets found!"
-            exit 1
-          fi
-          echo "No secrets found"
+          for f in zsh/.zshrc zsh/.zprofile zsh/.zsh/*.zsh \
+                   shell/.shell_env install.sh install/macos.sh; do
+            echo "Checking $f"
+            zsh -n "$f"
+          done
+
+  zsh-startup:
+    name: Smoke test zsh startup
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install stow
+        run: brew install stow
+
+      - name: Start an interactive shell with the dotfiles
+        run: |
+          export HOME="$RUNNER_TEMP/home"
+          mkdir -p "$HOME"
+          make stow
+          # first run clones zcomet and plugins
+          zsh -ic exit </dev/null >/dev/null 2>&1 || true
+          # second run must print nothing but READY (no errors or warnings)
+          out=$(script -q /dev/null zsh -ic 'echo READY' </dev/null 2>&1 \
+            | tr -d '\r\004\010' | sed 's/\^D//g')
+          echo "$out"
+          [[ "$out" == "READY" ]]
+
+  secrets:
+    name: Check for secrets
+    runs-on: ubuntu-latest
+    env:
+      GITLEAKS_VERSION: 8.30.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        run: |
+          repo="https://github.com/gitleaks/gitleaks"
+          base="$repo/releases/download/v${GITLEAKS_VERSION}"
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          sums="gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          curl -fsSLO "$base/$tarball"
+          curl -fsSLO "$base/$sums"
+          sha256sum -c --ignore-missing "$sums"
+          tar xzf "$tarball" gitleaks
+
+      - name: Scan full git history
+        run: ./gitleaks git . --redact -v
 
   linux:
     name: Test on Linux
