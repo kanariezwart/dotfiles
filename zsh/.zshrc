@@ -135,6 +135,11 @@ zcomet snippet ~/.zsh/functions.zsh
 zcomet snippet ~/.zsh/aliases.zsh
 
 # =============================================================================
+# Machine-local overrides (gitignored, not committed)
+# =============================================================================
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# =============================================================================
 # Compinit (always last)
 # =============================================================================
 zcomet compinit
