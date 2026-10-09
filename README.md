@@ -8,7 +8,7 @@ Personal dotfiles for macOS, managed with [GNU Stow](https://www.gnu.org/softwar
 dotfiles/
 ├── git/            # .gitconfig, .gitconfig.local, .gitignore_global
 ├── shell/          # .shell_env
-├── zsh/            # .zshrc, .zsh/aliases.zsh, .zsh/functions.zsh, .p10k.zsh
+├── zsh/            # .zprofile, .zshrc, .zsh/aliases.zsh, .zsh/functions.zsh, .p10k.zsh
 ├── iterm2/         # iTerm2 configuration
 ├── install/
 │   ├── Brewfile          # base packages and apps
@@ -72,7 +72,7 @@ Each directory is a Stow package that mirrors the home directory structure:
 
 | Package | Symlinks to |
 |---|---|
-| `zsh/` | `~/.zshrc`, `~/.zsh/`, `~/.p10k.zsh` |
+| `zsh/` | `~/.zprofile`, `~/.zshrc`, `~/.zsh/`, `~/.p10k.zsh` |
 | `git/` | `~/.gitconfig`, `~/.gitignore_global` |
 | `shell/` | `~/.shell_env` |
 

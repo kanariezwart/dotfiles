@@ -10,11 +10,9 @@ fi
 # =============================================================================
 # Environment
 # =============================================================================
-[[ -f "$HOME/.shell_env" ]] && source "$HOME/.shell_env"
-
-# $OSTYPE is a built-in zsh variable – no subshell fork needed like $(uname)
-if [[ "$OSTYPE" == darwin* ]]; then
-  export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+# Login shells already loaded this via .zprofile
+if [[ ! -o login && -f "$HOME/.shell_env" ]]; then
+  source "$HOME/.shell_env"
 fi
 
 # =============================================================================
