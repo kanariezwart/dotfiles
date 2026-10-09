@@ -12,14 +12,7 @@ dotfiles/
 ├── iterm2/         # iTerm2 configuration
 ├── install/
 │   ├── Brewfile          # base packages and apps
-│   ├── Brewfile.dev      # general development tools
-│   ├── Brewfile.go       # Go tools
-│   ├── Brewfile.php      # PHP tools
-│   ├── Brewfile.ruby     # Ruby tools
-│   ├── Brewfile.python   # Python tools
-│   ├── Brewfile.java     # Java tools
-│   ├── Brewfile.infra    # infrastructure tools
-│   ├── Brewfile.apps.dev # development apps
+│   ├── Brewfile.dev      # development tools
 │   └── macos.sh          # macOS system defaults
 ├── install.sh      # bootstrap script for new machines
 └── Makefile
@@ -61,14 +54,7 @@ make install
 |---|---|
 | `make install` | Full install: brew packages, symlinks and one-time setup |
 | `make brew` | Install base packages from Brewfile |
-| `make dev` | Install all development tools |
-| `make dev-go` | Install Go tools |
-| `make dev-php` | Install PHP tools |
-| `make dev-ruby` | Install Ruby tools |
-| `make dev-python` | Install Python tools |
-| `make dev-java` | Install Java tools |
-| `make dev-infra` | Install infrastructure tools |
-| `make dev-apps` | Install development apps |
+| `make dev` | Install development tools from `Brewfile.dev` |
 | `make stow` | Create symlinks only |
 | `make unstow` | Remove all symlinks |
 | `make test` | Simulate stow without modifying filesystem |

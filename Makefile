@@ -1,7 +1,7 @@
 DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
-.PHONY: help install brew dev dev-go dev-php dev-ruby dev-python dev-java dev-infra dev-apps \
+.PHONY: help install brew dev \
         stow unstow update test setup defaults iterm solarized ssh screenshots
 
 help: ## Show this help
@@ -16,28 +16,8 @@ install: brew stow setup ## Full install: brew packages, symlinks and one-time s
 brew: ## Install base packages from Brewfile
 	brew bundle --file=install/Brewfile
 
-dev: dev-go dev-php dev-ruby dev-python dev-java dev-infra dev-apps ## Install all development tools
-
-dev-go: ## Install Go tools
-	brew bundle --file=install/Brewfile.go
-
-dev-php: ## Install PHP tools
-	brew bundle --file=install/Brewfile.php
-
-dev-ruby: ## Install Ruby tools
-	brew bundle --file=install/Brewfile.ruby
-
-dev-python: ## Install Python tools
-	brew bundle --file=install/Brewfile.python
-
-dev-java: ## Install Java tools
-	brew bundle --file=install/Brewfile.java
-
-dev-infra: ## Install infrastructure tools
-	brew bundle --file=install/Brewfile.infra
-
-dev-apps: ## Install development apps
-	brew bundle --file=install/Brewfile.apps.dev
+dev: ## Install development tools from Brewfile.dev
+	brew bundle --file=install/Brewfile.dev
 
 # =============================================================================
 # Stow
