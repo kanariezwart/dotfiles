@@ -124,11 +124,14 @@ function update() {
   # request sudo upfront and keep it alive
   sudo -v
   while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-  
+  local keepalive=$!
+
   if [[ "$(uname)" == "Darwin" ]]; then
     sudo softwareupdate -i -a
     update_brew
   fi
+  # stop keep-alive before update_zcomet execs a new shell (same $$)
+  kill "$keepalive" 2>/dev/null
   update_zcomet
 }
 
