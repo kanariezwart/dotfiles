@@ -55,7 +55,6 @@ typeset -U PATH
 # Oh-my-zsh libraries
 # =============================================================================
 zcomet load ohmyzsh lib/completion.zsh
-zcomet load ohmyzsh lib/compfix.zsh
 zcomet load ohmyzsh lib/key-bindings.zsh
 
 # =============================================================================
@@ -142,4 +141,10 @@ zcomet snippet ~/.zsh/aliases.zsh
 # =============================================================================
 # Compinit (always last)
 # =============================================================================
+# Keep the dump out of $HOME; no $OSTYPE in the name so macOS upgrades
+# don't leave stale dumps behind
+_zcompdir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+[[ -d "$_zcompdir" ]] || mkdir -p "$_zcompdir"
+zstyle ':zcomet:compinit' dump-file "$_zcompdir/zcompdump-$ZSH_VERSION"
+unset _zcompdir
 zcomet compinit
