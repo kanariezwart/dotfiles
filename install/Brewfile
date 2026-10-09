@@ -1,5 +1,4 @@
 # Taps
-tap "buo/cask-upgrade"   # provides `brew cu`, used by update_brew
 
 # Shell
 brew "coreutils"

@@ -113,8 +113,7 @@ function update_zcomet() {
 # Update Homebrew and all packages (macOS only)
 function update_brew() {
   brew update \
-    && brew upgrade -y \
-    && brew cu -avyf \
+    && brew upgrade -y --greedy \
     && brew cleanup \
     && brew autoremove
 }
