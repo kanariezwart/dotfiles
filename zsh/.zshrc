@@ -32,7 +32,8 @@ zcomet load romkatv/powerlevel10k
 # =============================================================================
 # History
 # =============================================================================
-export HISTSIZE=1000000
+# HISTSIZE > SAVEHIST so HIST_EXPIRE_DUPS_FIRST has room to drop duplicates
+export HISTSIZE=1200000
 export SAVEHIST=1000000
 
 setopt EXTENDED_HISTORY       # Save timestamp and duration: ":start:elapsed;command"

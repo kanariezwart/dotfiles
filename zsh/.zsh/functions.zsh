@@ -1,4 +1,4 @@
-#!/bin/dotfiles
+#!/bin/zsh
 
 # Simple calculator
 function calc() {

@@ -1,4 +1,4 @@
-#!/bin/dotfiles
+#!/bin/zsh
 
 # Get week number
 alias week='date +%V'
@@ -10,9 +10,8 @@ alias reload='exec $SHELL -l'
 alias badge='tput bel'
 
 alias ff='find . -type f -name'
-alias h='history | grep' # Easy history grep
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$OSTYPE" == darwin* ]]; then
 # shellcheck source=.zsh/aliases-osx.zsh
   source ~/.zsh/aliases-osx.zsh
 fi

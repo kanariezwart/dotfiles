@@ -1,4 +1,4 @@
-#!/bin/dotfiles
+#!/bin/zsh
 
 # Flush Directory Service cache
 alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
