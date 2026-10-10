@@ -1,3 +1,5 @@
+# recipes use [[ ]], which /bin/sh does not guarantee
+SHELL := /bin/bash
 DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
@@ -84,7 +86,7 @@ solarized: ## Setup solarized dircolors
 
 defaults: ## Apply macOS system defaults (macOS only)
 	@[[ "$$(uname)" == "Darwin" ]] \
-		&& bash install/macos.sh \
+		&& zsh install/macos.sh \
 		|| echo "⚠ Skipping macOS defaults on non-macOS system"
 
 iterm: ## Import iTerm2 configuration (macOS only)

@@ -10,11 +10,9 @@ fi
 # =============================================================================
 # Environment
 # =============================================================================
-[[ -f "$HOME/.shell_env" ]] && source "$HOME/.shell_env"
-
-# $OSTYPE is a built-in zsh variable – no subshell fork needed like $(uname)
-if [[ "$OSTYPE" == darwin* ]]; then
-  export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+# Login shells already loaded this via .zprofile
+if [[ ! -o login && -f "$HOME/.shell_env" ]]; then
+  source "$HOME/.shell_env"
 fi
 
 # =============================================================================
@@ -34,7 +32,8 @@ zcomet load romkatv/powerlevel10k
 # =============================================================================
 # History
 # =============================================================================
-export HISTSIZE=1000000
+# HISTSIZE > SAVEHIST so HIST_EXPIRE_DUPS_FIRST has room to drop duplicates
+export HISTSIZE=1200000
 export SAVEHIST=1000000
 
 setopt EXTENDED_HISTORY       # Save timestamp and duration: ":start:elapsed;command"
@@ -57,7 +56,6 @@ typeset -U PATH
 # Oh-my-zsh libraries
 # =============================================================================
 zcomet load ohmyzsh lib/completion.zsh
-zcomet load ohmyzsh lib/compfix.zsh
 zcomet load ohmyzsh lib/key-bindings.zsh
 
 # =============================================================================
@@ -137,6 +135,17 @@ zcomet snippet ~/.zsh/functions.zsh
 zcomet snippet ~/.zsh/aliases.zsh
 
 # =============================================================================
+# Machine-local overrides (gitignored, not committed)
+# =============================================================================
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# =============================================================================
 # Compinit (always last)
 # =============================================================================
+# Keep the dump out of $HOME; no $OSTYPE in the name so macOS upgrades
+# don't leave stale dumps behind
+_zcompdir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+[[ -d "$_zcompdir" ]] || mkdir -p "$_zcompdir"
+zstyle ':zcomet:compinit' dump-file "$_zcompdir/zcompdump-$ZSH_VERSION"
+unset _zcompdir
 zcomet compinit
