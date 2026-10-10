@@ -17,6 +17,21 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # =============================================================================
+# Pointer
+# =============================================================================
+
+# Tracking speed of mouse and trackpad (0–3, higher = faster)
+defaults write NSGlobalDomain com.apple.mouse.scaling -float 3
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
+
+# Natural scrolling (content follows the fingers; macOS default)
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+
+# Tap to click off (built-in and Bluetooth trackpads)
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool false
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool false
+
+# =============================================================================
 # Text
 # =============================================================================
 
