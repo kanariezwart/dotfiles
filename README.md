@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal dotfiles for macOS, managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Personal dotfiles for macOS (and Debian/Ubuntu), managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Structure
 
@@ -20,9 +20,17 @@ dotfiles/
 └── Makefile
 ```
 
-## Fresh install
+## Fresh install (macOS)
 
-On a new Mac, run:
+### Before you start
+
+- **Sign in to the App Store.** Some apps (Bitwarden) are installed from the
+  Mac App Store via `mas`, which can't sign in for you.
+- Expect it to take a while: Homebrew, the Xcode Command Line Tools and all
+  apps are downloaded. On an Intel Mac, Homebrew no longer ships prebuilt
+  packages, so some formulae are compiled from source.
+
+### Run the bootstrap
 
 ```zsh
 curl -fsSL https://raw.githubusercontent.com/kanariezwart/dotfiles/main/install.sh | zsh
@@ -35,20 +43,77 @@ curl -fsSL https://raw.githubusercontent.com/kanariezwart/dotfiles/main/install.
 ```
 
 This will:
-1. Check for Homebrew and install if not present
-2. Check for Stow and install if not present
-3. Clone this repo to `~/Projects/system/dotfiles` (or custom path)
-4. Install all packages from `install/Brewfile`
-5. Symlink all dotfiles to `~` via Stow
-6. Run one-time setup (SSH, screenshots, solarized, macOS defaults, iTerm2)
+1. Install Homebrew and Stow if they are missing
+2. Clone this repo to `~/Projects/system/dotfiles` (or the custom path) over HTTPS
+3. Install all packages and apps from `install/Brewfile`. If single entries
+   fail (e.g. not signed in to the App Store), it warns and continues;
+   rerun `make brew` afterwards
+4. Symlink the dotfiles into `~` via Stow
+5. Run the one-time setup (`make setup`): Screenshots folder, SSH folder and
+   `~/.ssh/config.local` template, solarized dircolors, macOS defaults and
+   the iTerm2 configuration
 
-## Manual install
+### After the bootstrap
+
+1. **Restart iTerm2** (quit with ⌘Q) so it loads the imported profile and the
+   MesloLGS NF font, then open a new window: you should see the
+   Powerlevel10k prompt.
+2. **Create `~/.gitconfig.local`** with your email and signing key (see
+   [Machine-local files](#machine-local-files)). Commits are GPG-signed by
+   default, so this is needed before your first commit.
+3. **Set up SSH:** add your key to `~/.ssh` and GitHub. To use the
+   `~/.ssh/config.local` template, put `Include config.local` at the top of
+   `~/.ssh/config`. Then switch the repo to SSH if you like:
+   `git -C ~/Projects/system/dotfiles remote set-url origin git@github.com:kanariezwart/dotfiles.git`
+4. **Development machine?** Third-party taps must be trusted first
+   (Homebrew 7), then install the dev tools:
+   ```zsh
+   brew trust oven-sh/bun
+   make dev
+   ```
+5. **Check the result:** `make brew-check` should only list things you
+   installed deliberately outside the Brewfiles.
+
+Some macOS defaults only take effect after logging out and in again.
+
+## Fresh install (Debian/Ubuntu)
+
+`install.sh` and `make install` are macOS-only (Homebrew, `defaults`). On
+Debian/Ubuntu:
+
+```zsh
+sudo apt-get update && sudo apt-get install -y git make stow zsh
+git clone https://github.com/kanariezwart/dotfiles.git ~/Projects/system/dotfiles
+cd ~/Projects/system/dotfiles
+make stow                 # symlink the dotfiles (move conflicting files like ~/.zshrc aside first)
+make linux                # tools from install/apt.txt (dig, curl, fzf)
+make ssh                  # SSH folder and ~/.ssh/config.local template
+chsh -s "$(command -v zsh)"
+```
+
+Then log out and in again. On minimal installs (servers, containers), also
+generate the locale that `.shell_env` sets, or the prompt symbols break:
+`sudo apt-get install -y locales && sudo locale-gen en_US.UTF-8`.
+
+The first zsh start clones zcomet and the plugins (~20s). `make docker-test`
+runs the same `make stow` + `make linux` steps in a clean Ubuntu container.
+
+## Manual install (macOS)
 
 ```zsh
 git clone git@github.com:kanariezwart/dotfiles.git ~/Projects/system/dotfiles
 cd ~/Projects/system/dotfiles
 make install
 ```
+
+## Keeping up to date
+
+| Command | What it does |
+|---|---|
+| `update` | macOS software updates, Homebrew (formulae and casks) and zsh plugins |
+| `make update` | Pull the latest dotfiles and restow |
+| `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
+| `update_zcomet` | Update zsh plugins only |
 
 ## Commands
 
@@ -82,11 +147,18 @@ Each directory is a Stow package that mirrors the home directory structure:
 | `git/` | `~/.gitconfig`, `~/.gitignore_global` |
 | `shell/` | `~/.shell_env` |
 
-## Sensitive data
+## Machine-local files
 
-Personal settings like email, signing key and tokens go in `~/.gitconfig.local` — this file is excluded from the repo via `.gitignore`.
+Settings that differ per machine or contain secrets live in `*.local` files.
+They are not committed (`.gitignore`), and each is loaded only if it exists:
 
-Template:
+| File | Loaded by | For |
+|---|---|---|
+| `~/.gitconfig.local` | `~/.gitconfig` | email, signing key, GitHub user |
+| `~/.zshrc.local` | `~/.zshrc` | machine-specific aliases, functions and plugins |
+| `~/.ssh/config.local` | `~/.ssh/config`, once you add `Include config.local` at its top | SSH host definitions (template created by `make ssh`) |
+
+`~/.gitconfig.local` template:
 
 ```ini
 [user]
@@ -96,8 +168,6 @@ Template:
 [github]
   user = your-username
 ```
-
-SSH host definitions go in `~/.ssh/config.local` — also excluded from the repo. A template is created automatically by `make ssh`.
 
 ## Environment variable
 
@@ -156,8 +226,8 @@ update_zcomet
 
 ## Requirements
 
-- macOS 10.x
-- Zsh
-- [Homebrew](https://brew.sh)
-- [GNU Stow](https://www.gnu.org/software/stow/) (`brew install stow`)
-
+- macOS (Apple Silicon or Intel) with [Homebrew](https://brew.sh), or
+  Debian/Ubuntu with `apt`
+- Zsh 5.x
+- [GNU Stow](https://www.gnu.org/software/stow/) and `make`
+  (installed by the bootstrap / the apt step above)
