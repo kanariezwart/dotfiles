@@ -3,7 +3,7 @@ SHELL := /bin/bash
 DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
-.PHONY: help install brew dev linux \
+.PHONY: help install brew dev linux brew-check \
         stow unstow update test setup defaults iterm solarized ssh screenshots \
         docker-build docker-test docker-shell
 
@@ -21,6 +21,17 @@ brew: ## Install base packages from Brewfile
 
 dev: ## Install development tools from Brewfile.dev
 	brew bundle --file=install/Brewfile.dev
+
+brew-check: ## Show drift between installed Homebrew packages and the Brewfiles
+	@export HOMEBREW_NO_AUTO_UPDATE=1; \
+	files="install/Brewfile install/Brewfile.dev"; \
+	echo "== In a Brewfile, but not installed or outdated:"; \
+	for f in $$files; do brew bundle check --file=$$f --verbose 2>&1 \
+	  | sed -n "s|^→ \(.*\) needs to be installed or updated.|  \1  ($$f)|p"; done; \
+	echo "== Installed, but in no Brewfile (dependencies not shown):"; \
+	listed=$$(for f in $$files; do brew bundle list --formula --cask --file=$$f; done | sort -u); \
+	{ brew leaves --installed-on-request; brew list --cask -1; } | sort -u \
+	  | comm -23 - <(echo "$$listed") | sed 's/^/  /'
 
 linux: ## Install Linux packages from install/apt.txt (Debian/Ubuntu)
 	sudo apt-get update

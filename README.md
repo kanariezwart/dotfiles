@@ -56,6 +56,7 @@ make install
 |---|---|
 | `make install` | Full install: brew packages, symlinks and one-time setup |
 | `make brew` | Install base packages from Brewfile |
+| `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
 | `make dev` | Install development tools from `Brewfile.dev` |
 | `make linux` | Install Linux packages from `install/apt.txt` (Debian/Ubuntu) |
 | `make stow` | Create symlinks only |
