@@ -61,7 +61,8 @@ docker-test: docker-build ## Smoke test zsh startup in a vanilla Linux container
 	docker run --rm -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) test
 
 docker-shell: docker-build ## Open zsh with these dotfiles in a vanilla Linux container
-	docker run --rm -it -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) shell
+	@# pass the terminal type through, otherwise docker uses TERM=xterm (8 colors)
+	docker run --rm -it -e TERM -e COLORTERM -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) shell
 
 # =============================================================================
 # Maintenance

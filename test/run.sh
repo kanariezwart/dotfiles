@@ -70,6 +70,9 @@ case "${1:-test}" in
     check '\xE2\x82\xAC' 'escape €'
     check /usr/bin/dig 'whence -p dig'
     check /usr/bin/curl 'whence -p curl'
+    check /usr/bin/fzf 'whence -p fzf'
+    check '"^R" fzf-history-widget' 'bindkey "^R"'
+    check "ll='ls -lahGFN --group-directories-first'" 'alias ll'
     # ip keeps only the address when dig also returns CNAME/RRSIG lines
     # (stubbed dig: live DNS answers vary per resolver)
     check 93.184.216.34 'dig() { printf "%s\\n" www.example.com. 93.184.216.34 "A 13 2 300 sig"; }; ip example.com'

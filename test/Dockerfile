@@ -3,7 +3,11 @@
 # the dotfiles themselves (or fail visibly).
 FROM ubuntu:24.04
 
-RUN apt-get update \
+# The ubuntu image is minimized: dpkg skips /usr/share/doc and man pages,
+# where e.g. fzf's zsh key bindings live. Install packages fully, as on a
+# regular install.
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes \
+  && apt-get update \
   && apt-get install -y --no-install-recommends \
     ca-certificates git locales make stow sudo zsh \
   && rm -rf /var/lib/apt/lists/* \
