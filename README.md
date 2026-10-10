@@ -13,6 +13,7 @@ dotfiles/
 ├── install/
 │   ├── Brewfile          # base packages and apps
 │   ├── Brewfile.dev      # development tools
+│   ├── apt.txt           # Linux (Debian/Ubuntu) packages
 │   └── macos.sh          # macOS system defaults
 ├── install.sh      # bootstrap script for new machines
 ├── test/           # Docker test environment (vanilla Ubuntu)
@@ -56,6 +57,7 @@ make install
 | `make install` | Full install: brew packages, symlinks and one-time setup |
 | `make brew` | Install base packages from Brewfile |
 | `make dev` | Install development tools from `Brewfile.dev` |
+| `make linux` | Install Linux packages from `install/apt.txt` (Debian/Ubuntu) |
 | `make stow` | Create symlinks only |
 | `make unstow` | Remove all symlinks |
 | `make test` | Simulate stow without modifying filesystem |
@@ -120,12 +122,27 @@ Requires Docker. The repo is mounted read-only and copied into a fresh
 without rebuilding. Gitignored files (`*.local` secrets) are not copied.
 
 ```zsh
-make docker-test   # stow + start a login shell; fails on any startup output
+make docker-test   # stow + `make linux` + start a login shell; fails on any
+                   # startup output or a broken function
 make docker-shell  # same setup, but drops you into an interactive zsh
 ```
 
-Each run starts from scratch, so zcomet and its plugins are cloned again
-(~20s).
+Each run starts from scratch, so it takes ~30s before the prompt appears
+(installing packages, cloning zcomet and its plugins); progress is printed
+along the way.
+
+In `make docker-shell`, try for example:
+
+```zsh
+calc 22/7            # functions
+escape €
+ip example.com
+digga example.com
+alias                # aliases
+git <Tab>            # completion (fzf-tab)
+echo $DOTFILES       # environment from .zprofile / .shell_env
+exit                 # leave; the container is removed
+```
 
 ## Plugins
 

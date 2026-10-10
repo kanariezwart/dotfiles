@@ -39,5 +39,5 @@ function o() {
   fi
 }
 
+# GNU ls from coreutils (as on Linux), so `ll` works the same everywhere
 alias ls="gls --color"
-alias ll='ls -lahGFN --group-directories-first'

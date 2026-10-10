@@ -1,21 +1,18 @@
 #!/bin/zsh
 
-# Simple calculator
+# Simple calculator – pure zsh float math, no bc needed
+# `^` means power (as in bc); math functions use full names: sqrt, sin, log, …
 function calc() {
-  local result=""
-  result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
-  #                       └─ default (when `--mathlib` is used) is 20
-  #
-  if [[ "$result" == *.* ]]; then
-    # improve the output for decimal numbers
-    printf '%s' "$result" |
-    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-        -e 's/^-\./-0./'      `# add "0" for cases like "-.5"` \
-        -e 's/0*$//;s/\.$//'   # remove trailing zeros
-  else
-    printf '%s' "$result"
-  fi
-  printf "\n"
+  emulate -L zsh
+  setopt extended_glob force_float  # force_float: 1/3 is 0.333…, not 0
+  zmodload zsh/mathfunc
+  local result
+  result=$(( ${*//\^/**} )) || return 1
+  result=$(printf '%.10f' "$result")
+  result=${result%%0##}             # remove trailing zeros…
+  result=${result%.}                # …and a trailing dot
+  [[ $result == -0 ]] && result=0
+  print -r -- "$result"
 }
 
 # Create a new directory and enter it
@@ -61,8 +58,13 @@ function digga() {
 
 # UTF-8-encode a string of Unicode symbols
 function escape() {
-  # shellcheck disable=SC2046
-  printf "\\\x%s" $(printf '%s' "$@" | xxd -p -c1 -u)
+  emulate -L zsh
+  setopt no_multibyte  # index the string by byte, not by character
+  local IFS= i
+  local str="$*"  # join all arguments without separator
+  for (( i = 1; i <= $#str; i++ )); do
+    printf '\\x%02X' "'${str[i]}"
+  done
   # print a newline unless we're piping the output to another program
   if [ -t 1 ]; then
     echo "" # newline
@@ -137,7 +139,8 @@ function update() {
 # Get public IP or resolve a domain
 function ip() {
   if [[ -n "$1" ]]; then
-    dig +short "$1" | tail -n 1
+    # keep only addresses: some resolvers add CNAME or RRSIG (DNSSEC) lines
+    dig +short "$1" | grep -E '^[0-9.]+$' | tail -n 1
   else
     curl -s ipinfo.io/ip && echo
   fi

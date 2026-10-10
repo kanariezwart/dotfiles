@@ -1,0 +1,12 @@
+# Linux (Debian/Ubuntu) packages – install with: make linux
+# Tools the dotfiles use that a vanilla Linux install lacks
+# (on macOS they ship with the OS or come from the Brewfile).
+
+# dig – used by digga and ip
+bind9-dnsutils
+
+# curl – used by ip
+curl
+
+# fzf – used by fzf-tab and the ctrl-r / shift-down history search
+fzf

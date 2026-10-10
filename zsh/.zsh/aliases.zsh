@@ -11,6 +11,10 @@ alias badge='tput bel'
 
 alias ff='find . -type f -name'
 
+# GNU ls flags; on macOS `ls` is aliased to gls in aliases-osx.zsh
+alias ls='ls --color=auto'
+alias ll='ls -lahGFN --group-directories-first'
+
 if [[ "$OSTYPE" == darwin* ]]; then
 # shellcheck source=.zsh/aliases-osx.zsh
   source ~/.zsh/aliases-osx.zsh
