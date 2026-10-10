@@ -17,6 +17,11 @@ export EDITOR="nano"
 export DOTFILES="$HOME/Projects/system/dotfiles"
 
 # =============================================================================
+# Secrets / machine-local overrides (gitignored, not committed)
+# =============================================================================
+[[ -f "$HOME/.shell_env.local" ]] && source "$HOME/.shell_env.local"
+
+# =============================================================================
 # Go
 # =============================================================================
 export GOPATH="$HOME/Projects/golang"
