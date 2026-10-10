@@ -29,6 +29,7 @@ brew "fswatch"
 brew "fdupes"
 brew "p7zip"
 brew "gh"
+brew "mas"                            # Mac App Store CLI, for the mas entries below
 brew "shellcheck"
 
 # Network tools
@@ -61,7 +62,6 @@ cask "slack"
 # Productivity
 cask "flycut"
 cask "the-unarchiver"
-cask "bitwarden"
 cask "cleanmymac"
 cask "cleanmymac-cli"                 # `cleanmymac` / `cmm` command
 
@@ -83,3 +83,6 @@ cask "coconutbattery"
 cask "suspicious-package"
 cask "apparency"
 cask "kextviewr"
+
+# Mac App Store apps (installed and updated by the App Store; needs a signed-in account)
+mas "Bitwarden", id: 1352778147
