@@ -44,6 +44,7 @@ cask "flycut"
 cask "the-unarchiver"
 cask "bitwarden"
 cask "cleanmymac"
+cask "cleanmymac-cli"                 # `cleanmymac` / `cmm` command
 
 # Media
 cask "vlc"
