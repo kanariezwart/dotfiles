@@ -139,7 +139,8 @@ function update() {
 # Get public IP or resolve a domain
 function ip() {
   if [[ -n "$1" ]]; then
-    dig +short "$1" | tail -n 1
+    # keep only addresses: some resolvers add CNAME or RRSIG (DNSSEC) lines
+    dig +short "$1" | grep -E '^[0-9.]+$' | tail -n 1
   else
     curl -s ipinfo.io/ip && echo
   fi
