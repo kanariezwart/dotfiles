@@ -49,7 +49,10 @@ cd "$DOTFILES"
 # Install packages and symlinks
 # =============================================================================
 echo "Installing brew packages..."
-brew bundle --file=install/Brewfile
+# Don't abort the bootstrap when single entries fail (e.g. mas apps need a
+# signed-in App Store account); stow and setup should still run
+brew bundle --file=install/Brewfile \
+  || echo "⚠ Some Brewfile entries failed – fix the cause and rerun: make brew"
 
 echo "Creating symlinks..."
 for package in zsh git shell; do
