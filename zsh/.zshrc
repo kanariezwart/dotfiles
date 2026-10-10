@@ -102,9 +102,14 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -1 --color=always $realpath'
 # fzf – must be before syntax-highlighting
 zcomet load aloxaf/fzf-tab
 
-# fzf key bindings and completions
-[[ -f "$FZF_PATH/shell/key-bindings.zsh" ]] && source "$FZF_PATH/shell/key-bindings.zsh"
-[[ -f "$FZF_PATH/shell/completion.zsh" ]] && source "$FZF_PATH/shell/completion.zsh"
+# fzf key bindings and completions (Homebrew: shell/, Debian/Ubuntu: examples/)
+for _fzf_dir in "$FZF_PATH/shell" "$FZF_PATH/examples"; do
+  [[ -f "$_fzf_dir/key-bindings.zsh" ]] || continue
+  source "$_fzf_dir/key-bindings.zsh"
+  [[ -f "$_fzf_dir/completion.zsh" ]] && source "$_fzf_dir/completion.zsh"
+  break
+done
+unset _fzf_dir
 
 # zsh-syntax-highlighting ALWAYS last plugin
 zcomet load zdharma-continuum/fast-syntax-highlighting
