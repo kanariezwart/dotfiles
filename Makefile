@@ -3,7 +3,7 @@ SHELL := /bin/bash
 DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
-.PHONY: help install brew dev \
+.PHONY: help install brew dev linux \
         stow unstow update test setup defaults iterm solarized ssh screenshots \
         docker-build docker-test docker-shell
 
@@ -21,6 +21,10 @@ brew: ## Install base packages from Brewfile
 
 dev: ## Install development tools from Brewfile.dev
 	brew bundle --file=install/Brewfile.dev
+
+linux: ## Install Linux packages from install/apt.txt (Debian/Ubuntu)
+	sudo apt-get update
+	sudo apt-get install -y --no-install-recommends $$(sed 's/#.*//' install/apt.txt)
 
 # =============================================================================
 # Stow
