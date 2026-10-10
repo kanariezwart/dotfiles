@@ -25,6 +25,15 @@ if ! make -C "$dotfiles" linux >/tmp/make-linux.log 2>&1; then
   exit 1
 fi
 
+# One-time setup (ssh, timezone, locale), twice: the second run must find
+# everything in place and change nothing
+echo "→ Running make setup…"
+if ! make -C "$dotfiles" setup >/tmp/setup-1.log 2>&1; then
+  cat /tmp/setup-1.log >&2
+  exit 1
+fi
+make -C "$dotfiles" setup >/tmp/setup-2.log 2>&1 || { cat /tmp/setup-2.log >&2; exit 1; }
+
 # Run a command in a fully configured interactive login shell (with a pty).
 # The timeout keeps a hanging plugin clone from blocking the test forever.
 in_zsh() {
@@ -63,6 +72,26 @@ case "${1:-test}" in
       echo "✗ unexpected output during zsh startup" >&2
       exit 1
     fi
+
+    # make setup: system state, and a second run that changes nothing
+    check_sh() {  # check_sh <expected output> <bash command>
+      local got
+      got=$(bash -c "$2" 2>&1) || true
+      if [[ "$got" == "$1" ]]; then echo "✓ $2"; else echo "✗ $2: expected '$1', got '$got'" >&2; failed=1; fi
+    }
+    check_sh /usr/share/zoneinfo/Europe/Amsterdam 'readlink /etc/localtime'
+    check_sh Europe/Amsterdam 'cat /etc/timezone'
+    check_sh en_US.utf8 'locale -a | grep -ix en_US.utf8'
+    check_sh LANG=en_US.UTF-8 'grep ^LANG= /etc/default/locale'
+    check_sh 'Include config.local' 'head -1 ~/.ssh/config'
+    # shellcheck disable=SC2016  # expands in the checked shell, not here
+    check_sh '600 600' 'echo $(stat -c %a ~/.ssh/config ~/.ssh/config.local)'
+    # second run: every ✓ line reports "already" (nothing changed)
+    check_sh 0 'grep "✓" /tmp/setup-2.log | grep -vc already'
+    # shells follow the system timezone (no TZ export in .shell_env)
+    # shellcheck disable=SC2016  # expands in the checked shell, not here
+    check unset 'echo ${TZ:-unset}'
+    check Europe/Amsterdam 'date +%Z | grep -qE "^CES?T$" && echo Europe/Amsterdam'
 
     # functions work and find the tools they need
     check 0.3333333333 'calc 1/3'
