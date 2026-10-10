@@ -5,8 +5,10 @@ FROM ubuntu:24.04
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    ca-certificates git make stow sudo zsh \
-  && rm -rf /var/lib/apt/lists/*
+    ca-certificates git locales make stow sudo zsh \
+  && rm -rf /var/lib/apt/lists/* \
+  # .shell_env sets LANG=en_US.UTF-8, as present on a desktop install
+  && locale-gen en_US.UTF-8
 
 COPY run.sh /usr/local/bin/run-dotfiles
 

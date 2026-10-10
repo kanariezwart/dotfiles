@@ -10,6 +10,7 @@ dotfiles="$HOME/Projects/system/dotfiles"
 
 # Copy what a fresh clone plus uncommitted changes would contain: tracked and
 # untracked-but-not-ignored files. Gitignored *.local files (secrets) stay out.
+echo "→ Copying dotfiles and running make stow…"
 mkdir -p "$dotfiles"
 git -c safe.directory=/src -C /src ls-files -z --cached --others --exclude-standard \
   | tar -C /src --null -T - --ignore-failed-read -cf - 2>/dev/null \
@@ -18,6 +19,7 @@ git -c safe.directory=/src -C /src ls-files -z --cached --others --exclude-stand
 make -C "$dotfiles" stow >/dev/null
 
 # Linux packages, as a user would install them (output only on failure)
+echo "→ Installing Linux packages (make linux)…"
 if ! make -C "$dotfiles" linux >/tmp/make-linux.log 2>&1; then
   cat /tmp/make-linux.log >&2
   exit 1
@@ -42,10 +44,16 @@ check() {
   fi
 }
 
+# First start clones zcomet and plugins, and its first prompt fetches p10k's
+# gitstatusd. Doing that up front keeps it out of the shell under test.
+# It runs in its own pty (script) and draws one prompt before `exit`: an
+# interactive zsh on the container's terminal would take over its foreground
+# process group, and the next shell would fail with "error on TTY read".
+echo "→ First zsh start: cloning zcomet and plugins (~20s)…"
+printf 'exit\n' | timeout 300 script -qec "zsh -li" /dev/null >/dev/null 2>&1 || true
+
 case "${1:-test}" in
   test)
-    # first run clones zcomet and plugins
-    timeout 300 zsh -lic exit </dev/null >/dev/null 2>&1 || true
     # second run must print nothing but READY (no errors or warnings)
     out=$(in_zsh 'echo READY')
     echo "$out"
@@ -68,6 +76,7 @@ case "${1:-test}" in
     exit "$failed"
     ;;
   shell)
+    echo "→ Starting zsh (type exit to leave)"
     exec zsh -l
     ;;
   *)
