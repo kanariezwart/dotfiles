@@ -15,6 +15,15 @@ alias ff='find . -type f -name'
 alias ls='ls --color=auto'
 alias ll='ls -lahGFN --group-directories-first'
 
+# cat with syntax highlighting; when piped, bat behaves like plain cat.
+# An alias (not a symlink) so scripts keep using the real cat.
+# Debian/Ubuntu install bat as batcat.
+if command -v bat >/dev/null; then
+  alias cat='bat --paging=never'
+elif command -v batcat >/dev/null; then
+  alias cat='batcat --paging=never'
+fi
+
 if [[ "$OSTYPE" == darwin* ]]; then
 # shellcheck source=.zsh/aliases-osx.zsh
   source ~/.zsh/aliases-osx.zsh
