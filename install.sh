@@ -49,17 +49,15 @@ cd "$DOTFILES"
 # Install packages and symlinks
 # =============================================================================
 echo "Installing brew packages..."
-brew bundle --file=install/Brewfile
+# Don't abort the bootstrap when single entries fail (e.g. mas apps need a
+# signed-in App Store account); stow and setup should still run
+brew bundle --file=install/Brewfile \
+  || echo "⚠ Some Brewfile entries failed – fix the cause and rerun: make brew"
 
 echo "Creating symlinks..."
 for package in zsh git shell; do
   stow --target="$HOME" "$package"
 done
-
-# zcomet is normally bootstrapped by .zshrc, but `make solarized` needs it now
-if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
-  git clone https://github.com/agkozak/zcomet.git "${ZDOTDIR:-${HOME}}/.zcomet/bin"
-fi
 
 echo "Running one-time setup..."
 make setup

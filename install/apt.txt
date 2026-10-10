@@ -10,3 +10,10 @@ curl
 
 # fzf – used by fzf-tab and the ctrl-r / shift-down history search
 fzf
+
+# vivid – generates LS_COLORS (solarized dark) in .shell_env
+vivid
+
+# locales, tzdata – needed by make setup (locale-gen, /usr/share/zoneinfo)
+locales
+tzdata
