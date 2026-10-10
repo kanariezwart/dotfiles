@@ -111,6 +111,16 @@ jobs:
           echo "$out"
           [[ "$out" == "READY" ]]
 
+      # runners are Apple Silicon: a login shell with a bare environment must
+      # find Homebrew in /opt/homebrew via .zprofile (brew shellenv)
+      - name: Homebrew on PATH in a login shell
+        run: |
+          bare_path=/usr/bin:/bin:/usr/sbin:/sbin
+          out=$(env -i HOME="$RUNNER_TEMP/home" PATH="$bare_path" \
+            zsh -lc 'echo "$(command -v brew) $HOMEBREW_PREFIX"')
+          echo "$out"
+          [[ "$out" == "/opt/homebrew/bin/brew /opt/homebrew" ]]
+
   secrets:
     name: Check for secrets
     runs-on: ubuntu-latest
