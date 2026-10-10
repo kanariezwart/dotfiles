@@ -141,11 +141,10 @@ locale: ## Generate and set LOCALE on Linux; region and languages on macOS
 		else echo "✓ Default locale already $(LOCALE)"; fi; \
 	fi
 
-screenshots: ## Create Screenshots directory
-	@echo "Creating Screenshots directory..."
-	@mkdir -p $(HOME)/Screenshots
-	@defaults write com.apple.screencapture location -string "$(HOME)/Screenshots"
-	@echo "✓ Screenshots -> ~/Screenshots"
+screenshots: ## Save screenshots to ~/Documents/Screenshots
+	@mkdir -p $(HOME)/Documents/Screenshots
+	@defaults write com.apple.screencapture location -string "$(HOME)/Documents/Screenshots"
+	@echo "✓ Screenshots -> ~/Documents/Screenshots"
 
 ssh: ## Create SSH directory and config.local template, included from ~/.ssh/config
 	@echo "Setting up SSH..."

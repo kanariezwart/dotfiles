@@ -1,6 +1,7 @@
 #!/bin/zsh
 # macOS system defaults
-# Run this script after a fresh install to configure macOS settings
+# Records the settings of the current Mac; settings left at the macOS default
+# are not listed. Run this script after a fresh install to configure macOS.
 # Some settings require a logout/restart to take effect
 
 echo "Configuring macOS settings..."
@@ -13,23 +14,20 @@ echo "Configuring macOS settings..."
 defaults write NSGlobalDomain KeyRepeat -int 2
 
 # Delay before key repeat starts (lower = sooner)
-defaults write NSGlobalDomain InitialKeyRepeat -int 10
-
-# Disable press-and-hold for keys (enables key repeat)
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # =============================================================================
 # Text
 # =============================================================================
 
-# Disable automatic spelling correction
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+# Automatic spelling correction
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true
 
-# Disable smart quotes
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+# Smart quotes
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true
 
-# Disable smart dashes
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+# Smart dashes
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true
 
 # =============================================================================
 # Dock
@@ -44,10 +42,6 @@ defaults write com.apple.dock tilesize -int 43
 # Dock position
 defaults write com.apple.dock orientation -string "bottom"
 
-# Speed up dock show/hide animation
-defaults write com.apple.dock autohide-delay -float 0
-defaults write com.apple.dock autohide-time-modifier -float 0.5
-
 # =============================================================================
 # Finder
 # =============================================================================
@@ -55,40 +49,10 @@ defaults write com.apple.dock autohide-time-modifier -float 0.5
 # Show hidden files
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
-# Show path bar
-defaults write com.apple.finder ShowPathbar -bool true
+# Default to column view
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
-# Show status bar
-defaults write com.apple.finder ShowStatusBar -bool true
-
-# Show file extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-# Default to list view
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-# Disable warning when changing file extension
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# =============================================================================
-# Screensaver
-# =============================================================================
-
-# Require password after screensaver
-defaults write com.apple.screensaver askForPassword -bool true
-defaults write com.apple.screensaver askForPasswordDelay -int 0
-
-# =============================================================================
-# Screenshots
-# =============================================================================
-
-# Location (~/Screenshots) is set by `make screenshots`
-
-# Save screenshots as PNG
-defaults write com.apple.screencapture type -string "png"
-
-# Disable screenshot shadow
-defaults write com.apple.screencapture disable-shadow -bool true
+# Screenshot location (~/Documents/Screenshots) is set by `make screenshots`
 
 # =============================================================================
 # Restart affected apps
