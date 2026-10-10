@@ -29,7 +29,7 @@ brew "gnupg"
 brew "pinentry-mac"
 
 # Fonts
-cask "font-meslo-lg-nerd-font"
+cask "font-meslo-for-powerlevel10k"   # MesloLGS NF, the font the iTerm2 profile uses
 
 # Browsers
 cask "firefox"
@@ -44,6 +44,7 @@ cask "flycut"
 cask "the-unarchiver"
 cask "bitwarden"
 cask "cleanmymac"
+cask "cleanmymac-cli"                 # `cleanmymac` / `cmm` command
 
 # Media
 cask "vlc"
