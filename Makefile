@@ -93,15 +93,24 @@ screenshots: ## Create Screenshots directory
 	@defaults write com.apple.screencapture location -string "$(HOME)/Screenshots"
 	@echo "✓ Screenshots -> ~/Screenshots"
 
-ssh: ## Create SSH directory and config.local template
+ssh: ## Create SSH directory and config.local template, included from ~/.ssh/config
 	@echo "Setting up SSH..."
 	@mkdir -p $(HOME)/.ssh && chmod 700 $(HOME)/.ssh
 	@if [[ ! -f "$(HOME)/.ssh/config.local" ]]; then \
 		printf "# Local SSH host definitions\n# Add your hosts here\n\n# Example:\n# Host myserver\n#   HostName 1.2.3.4\n#   User myuser\n#   Port 22\n#   IdentityFile ~/.ssh/id_ed25519\n" \
-			> $(HOME)/.ssh/config.local; \
+			> $(HOME)/.ssh/config.local && chmod 600 $(HOME)/.ssh/config.local; \
 		echo "✓ Created ~/.ssh/config.local template"; \
 	else \
 		echo "✓ ~/.ssh/config.local already exists"; \
+	fi
+	@# Include must come first: after a Host block it would only apply to that host
+	@cfg="$(HOME)/.ssh/config"; \
+	if grep -qxF 'Include config.local' "$$cfg" 2>/dev/null; then \
+		echo "✓ ~/.ssh/config already includes config.local"; \
+	else \
+		{ printf 'Include config.local\n\n'; if [ -f "$$cfg" ]; then cat "$$cfg"; fi; } > "$$cfg.tmp" \
+			&& chmod 600 "$$cfg.tmp" && mv "$$cfg.tmp" "$$cfg" \
+			&& echo "✓ Added 'Include config.local' to the top of ~/.ssh/config"; \
 	fi
 
 solarized: ## Setup solarized dircolors

@@ -49,9 +49,9 @@ This will:
    fail (e.g. not signed in to the App Store), it warns and continues;
    rerun `make brew` afterwards
 4. Symlink the dotfiles into `~` via Stow
-5. Run the one-time setup (`make setup`): Screenshots folder, SSH folder and
-   `~/.ssh/config.local` template, solarized dircolors, macOS defaults and
-   the iTerm2 configuration
+5. Run the one-time setup (`make setup`): Screenshots folder, SSH folder with
+   a `~/.ssh/config.local` template included from `~/.ssh/config`, solarized
+   dircolors, macOS defaults and the iTerm2 configuration
 
 ### After the bootstrap
 
@@ -61,9 +61,8 @@ This will:
 2. **Create `~/.gitconfig.local`** with your email and signing key (see
    [Machine-local files](#machine-local-files)). Commits are GPG-signed by
    default, so this is needed before your first commit.
-3. **Set up SSH:** add your key to `~/.ssh` and GitHub. To use the
-   `~/.ssh/config.local` template, put `Include config.local` at the top of
-   `~/.ssh/config`. Then switch the repo to SSH if you like:
+3. **Set up SSH:** add your key to `~/.ssh` and GitHub, put your hosts in
+   `~/.ssh/config.local`, then switch the repo to SSH if you like:
    `git -C ~/Projects/system/dotfiles remote set-url origin git@github.com:kanariezwart/dotfiles.git`
 4. **Development machine?** Third-party taps must be trusted first
    (Homebrew 7), then install the dev tools:
@@ -87,7 +86,7 @@ git clone https://github.com/kanariezwart/dotfiles.git ~/Projects/system/dotfile
 cd ~/Projects/system/dotfiles
 make stow                 # symlink the dotfiles (move conflicting files like ~/.zshrc aside first)
 make linux                # tools from install/apt.txt (dig, curl, fzf)
-make ssh                  # SSH folder and ~/.ssh/config.local template
+make ssh                  # SSH folder, ~/.ssh/config.local included from ~/.ssh/config
 chsh -s "$(command -v zsh)"
 ```
 
@@ -134,7 +133,7 @@ make install
 | `make defaults` | Apply macOS system defaults |
 | `make iterm` | Import iTerm2 configuration |
 | `make solarized` | Setup solarized dircolors |
-| `make ssh` | Create SSH directory and config.local template |
+| `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config |
 | `make screenshots` | Create Screenshots directory |
 
 ## Stow packages
@@ -156,7 +155,7 @@ They are not committed (`.gitignore`), and each is loaded only if it exists:
 |---|---|---|
 | `~/.gitconfig.local` | `~/.gitconfig` | email, signing key, GitHub user |
 | `~/.zshrc.local` | `~/.zshrc` | machine-specific aliases, functions and plugins |
-| `~/.ssh/config.local` | `~/.ssh/config`, once you add `Include config.local` at its top | SSH host definitions (template created by `make ssh`) |
+| `~/.ssh/config.local` | `~/.ssh/config` (`make ssh` adds the `Include`) | SSH host definitions |
 
 `~/.gitconfig.local` template:
 
