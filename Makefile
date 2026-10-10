@@ -4,7 +4,7 @@ DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
 .PHONY: help install brew dev linux brew-check \
-        stow unstow update test setup defaults iterm solarized ssh screenshots \
+        stow unstow update test setup defaults iterm ssh screenshots \
         docker-build docker-test docker-shell
 
 help: ## Show this help
@@ -85,7 +85,7 @@ update: ## Pull latest changes and restow
 # =============================================================================
 # One-time setup
 # =============================================================================
-setup: screenshots ssh solarized defaults iterm ## Run all one-time setup tasks
+setup: screenshots ssh defaults iterm ## Run all one-time setup tasks
 
 screenshots: ## Create Screenshots directory
 	@echo "Creating Screenshots directory..."
@@ -111,17 +111,6 @@ ssh: ## Create SSH directory and config.local template, included from ~/.ssh/con
 		{ printf 'Include config.local\n\n'; if [ -f "$$cfg" ]; then cat "$$cfg"; fi; } > "$$cfg.tmp" \
 			&& chmod 600 "$$cfg.tmp" && mv "$$cfg.tmp" "$$cfg" \
 			&& echo "✓ Added 'Include config.local' to the top of ~/.ssh/config"; \
-	fi
-
-solarized: ## Setup solarized dircolors
-	@echo "Setting up solarized dircolors..."
-	@if [[ ! -f "$(HOME)/.zsh-dircolors.config" ]]; then \
-		zsh -c 'source $${ZDOTDIR:-$$HOME}/.zcomet/bin/zcomet.zsh && \
-			zcomet load joel-porquet/zsh-dircolors-solarized && \
-			setupsolarized dircolors.ansi-dark'; \
-		echo "✓ Solarized dircolors configured"; \
-	else \
-		echo "✓ Solarized dircolors already configured"; \
 	fi
 
 defaults: ## Apply macOS system defaults (macOS only)

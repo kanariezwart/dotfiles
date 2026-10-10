@@ -59,11 +59,6 @@ for package in zsh git shell; do
   stow --target="$HOME" "$package"
 done
 
-# zcomet is normally bootstrapped by .zshrc, but `make solarized` needs it now
-if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
-  git clone https://github.com/agkozak/zcomet.git "${ZDOTDIR:-${HOME}}/.zcomet/bin"
-fi
-
 echo "Running one-time setup..."
 make setup
 

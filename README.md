@@ -50,8 +50,8 @@ This will:
    rerun `make brew` afterwards
 4. Symlink the dotfiles into `~` via Stow
 5. Run the one-time setup (`make setup`): Screenshots folder, SSH folder with
-   a `~/.ssh/config.local` template included from `~/.ssh/config`, solarized
-   dircolors, macOS defaults and the iTerm2 configuration
+   a `~/.ssh/config.local` template included from `~/.ssh/config`, macOS
+   defaults and the iTerm2 configuration
 
 ### After the bootstrap
 
@@ -132,7 +132,6 @@ make install
 | `make setup` | Run all one-time setup tasks |
 | `make defaults` | Apply macOS system defaults |
 | `make iterm` | Import iTerm2 configuration |
-| `make solarized` | Setup solarized dircolors |
 | `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config |
 | `make screenshots` | Create Screenshots directory |
 
