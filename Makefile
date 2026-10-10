@@ -4,7 +4,8 @@ DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
 .PHONY: help install brew dev \
-        stow unstow update test setup defaults iterm solarized ssh screenshots
+        stow unstow update test setup defaults iterm solarized ssh screenshots \
+        docker-build docker-test docker-shell
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -43,6 +44,20 @@ test: ## Simulate stow without modifying filesystem
 		stow --simulate --target=$(HOME) $$package; \
 	done
 	@echo "All packages OK!"
+
+# =============================================================================
+# Docker test environment (vanilla Ubuntu, see test/)
+# =============================================================================
+DOCKER_IMAGE := dotfiles-test
+
+docker-build:
+	@docker build -q -t $(DOCKER_IMAGE) test/ >/dev/null
+
+docker-test: docker-build ## Smoke test zsh startup in a vanilla Linux container
+	docker run --rm -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) test
+
+docker-shell: docker-build ## Open zsh with these dotfiles in a vanilla Linux container
+	docker run --rm -it -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) shell
 
 # =============================================================================
 # Maintenance

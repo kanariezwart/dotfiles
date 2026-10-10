@@ -15,6 +15,7 @@ dotfiles/
 │   ├── Brewfile.dev      # development tools
 │   └── macos.sh          # macOS system defaults
 ├── install.sh      # bootstrap script for new machines
+├── test/           # Docker test environment (vanilla Ubuntu)
 └── Makefile
 ```
 
@@ -58,6 +59,8 @@ make install
 | `make stow` | Create symlinks only |
 | `make unstow` | Remove all symlinks |
 | `make test` | Simulate stow without modifying filesystem |
+| `make docker-test` | Smoke test zsh startup in a vanilla Linux container |
+| `make docker-shell` | Open zsh with these dotfiles in a vanilla Linux container |
 | `make update` | Pull latest changes and restow |
 | `make setup` | Run all one-time setup tasks |
 | `make defaults` | Apply macOS system defaults |
@@ -109,6 +112,20 @@ Override by passing a path to `install.sh` or by editing `.shell_env` after inst
 2. Mirror the home directory structure inside it (e.g. `nano/.nanorc`)
 3. Add the package name to `PACKAGES` in the Makefile and `install.sh`
 4. Run `make stow`
+
+## Testing in a vanilla Linux container
+
+Requires Docker. The repo is mounted read-only and copied into a fresh
+`ubuntu:24.04` container on every run, so uncommitted changes are picked up
+without rebuilding. Gitignored files (`*.local` secrets) are not copied.
+
+```zsh
+make docker-test   # stow + start a login shell; fails on any startup output
+make docker-shell  # same setup, but drops you into an interactive zsh
+```
+
+Each run starts from scratch, so zcomet and its plugins are cloned again
+(~20s).
 
 ## Plugins
 
