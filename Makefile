@@ -3,8 +3,14 @@ SHELL := /bin/bash
 DOTFILES := $(shell pwd)
 PACKAGES := zsh git shell
 
+# System settings applied by `make setup`
+TIMEZONE      := Europe/Amsterdam
+LOCALE        := en_US.UTF-8
+MAC_REGION    := en_NL
+MAC_LANGUAGES := en-GB nl-NL
+
 .PHONY: help install brew dev linux brew-check \
-        stow unstow update test setup defaults iterm ssh screenshots \
+        stow unstow update test setup defaults iterm ssh screenshots timezone locale \
         docker-build docker-test docker-shell
 
 help: ## Show this help
@@ -35,7 +41,8 @@ brew-check: ## Show drift between installed Homebrew packages and the Brewfiles
 
 linux: ## Install Linux packages from install/apt.txt (Debian/Ubuntu)
 	sudo apt-get update
-	sudo apt-get install -y --no-install-recommends $$(sed 's/#.*//' install/apt.txt)
+	@# noninteractive: tzdata would otherwise ask for a timezone (make timezone sets it)
+	sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $$(sed 's/#.*//' install/apt.txt)
 
 # =============================================================================
 # Stow
@@ -85,7 +92,54 @@ update: ## Pull latest changes and restow
 # =============================================================================
 # One-time setup
 # =============================================================================
-setup: screenshots ssh defaults iterm ## Run all one-time setup tasks
+ifeq ($(shell uname),Darwin)
+SETUP_TASKS := screenshots ssh timezone locale defaults iterm
+else
+SETUP_TASKS := ssh timezone locale
+endif
+
+setup: $(SETUP_TASKS) ## Run all one-time setup tasks for this OS (safe to rerun)
+
+timezone: ## Set the system timezone (TIMEZONE); automatic timezone on macOS
+	@if [[ "$$(uname)" == "Darwin" ]]; then \
+		if [[ "$$(readlink /etc/localtime)" != */zoneinfo/$(TIMEZONE) ]]; then \
+			sudo systemsetup -settimezone "$(TIMEZONE)" >/dev/null \
+				&& echo "✓ Timezone set to $(TIMEZONE)"; \
+		else echo "✓ Timezone already $(TIMEZONE)"; fi; \
+		if [[ "$$(defaults read /Library/Preferences/com.apple.timezone.auto Active 2>/dev/null)" != 1 ]]; then \
+			sudo defaults write /Library/Preferences/com.apple.timezone.auto Active -bool true \
+				&& echo "✓ Automatic timezone set to on"; \
+		else echo "✓ Automatic timezone already on"; fi; \
+	else \
+		zone="/usr/share/zoneinfo/$(TIMEZONE)"; \
+		[[ -e "$$zone" ]] || { echo "✗ $$zone missing – install tzdata (make linux)"; exit 1; }; \
+		if [[ "$$(readlink /etc/localtime)" != *"/zoneinfo/$(TIMEZONE)" ]]; then \
+			sudo ln -sf "$$zone" /etc/localtime \
+				&& echo "$(TIMEZONE)" | sudo tee /etc/timezone >/dev/null \
+				&& echo "✓ Timezone set to $(TIMEZONE)"; \
+		else echo "✓ Timezone already $(TIMEZONE)"; fi; \
+	fi
+
+locale: ## Generate and set LOCALE on Linux; region and languages on macOS
+	@if [[ "$$(uname)" == "Darwin" ]]; then \
+		changed=; \
+		[[ "$$(defaults read NSGlobalDomain AppleLocale 2>/dev/null)" == "$(MAC_REGION)" ]] \
+			|| { defaults write NSGlobalDomain AppleLocale -string "$(MAC_REGION)"; changed=1; }; \
+		[[ "$$(defaults read NSGlobalDomain AppleLanguages 2>/dev/null | tr -d ' \n\"()' | tr ',' ' ')" == "$(MAC_LANGUAGES)" ]] \
+			|| { defaults write NSGlobalDomain AppleLanguages -array $(MAC_LANGUAGES); changed=1; }; \
+		defaults write NSGlobalDomain AppleMeasurementUnits -string Centimeters; \
+		defaults write NSGlobalDomain AppleMetricUnits -bool true; \
+		defaults write NSGlobalDomain AppleTemperatureUnit -string Celsius; \
+		if [[ -n "$$changed" ]]; then echo "✓ Region set to $(MAC_REGION), languages $(MAC_LANGUAGES) (log out to apply)"; \
+		else echo "✓ Region already $(MAC_REGION), languages $(MAC_LANGUAGES)"; fi; \
+	else \
+		if ! locale -a 2>/dev/null | tr -d '-' | grep -qix "$(subst -,,$(LOCALE))"; then \
+			sudo locale-gen "$(LOCALE)" >/dev/null && echo "✓ Locale $(LOCALE) generated"; \
+		else echo "✓ Locale $(LOCALE) already generated"; fi; \
+		if ! grep -qE '^LANG="?$(LOCALE)"?$$' /etc/default/locale 2>/dev/null; then \
+			sudo update-locale LANG="$(LOCALE)" && echo "✓ Default locale set to $(LOCALE)"; \
+		else echo "✓ Default locale already $(LOCALE)"; fi; \
+	fi
 
 screenshots: ## Create Screenshots directory
 	@echo "Creating Screenshots directory..."
@@ -118,11 +172,12 @@ defaults: ## Apply macOS system defaults (macOS only)
 		&& zsh install/macos.sh \
 		|| echo "⚠ Skipping macOS defaults on non-macOS system"
 
-iterm: ## Import iTerm2 configuration (macOS only)
-	@echo "Importing iTerm2 configuration..."
-	@if [[ -f "$(DOTFILES)/iterm2/com.googlecode.iterm2.plist" ]]; then \
-		defaults import com.googlecode.iterm2 $(DOTFILES)/iterm2/com.googlecode.iterm2.plist; \
-		echo "✓ iTerm2 configuration imported"; \
+iterm: ## Let iTerm2 load and save its settings in iterm2/ of this repo (macOS only)
+	@if [[ "$$(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null)" == "$(DOTFILES)/iterm2" \
+		&& "$$(defaults read com.googlecode.iterm2 LoadPrefsFromCustomFolder 2>/dev/null)" == 1 ]]; then \
+		echo "✓ iTerm2 already uses $(DOTFILES)/iterm2"; \
 	else \
-		echo "⚠ No iTerm2 configuration found, skipping"; \
+		defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$(DOTFILES)/iterm2"; \
+		defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true; \
+		echo "✓ iTerm2 set to use $(DOTFILES)/iterm2 (restart iTerm2)"; \
 	fi
