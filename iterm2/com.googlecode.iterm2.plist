@@ -25,13 +25,42 @@
 	<key>AiMaxTokens</key>
 	<integer>200000</integer>
 	<key>AiModel</key>
-	<string>claude-opus-4-6</string>
+	<string>claude-opus-4-8</string>
 	<key>AiResponseMaxTokens</key>
 	<integer>128000</integer>
 	<key>AitermURL</key>
 	<string>https://api.anthropic.com/v1/messages</string>
 	<key>AlternateMouseScroll</key>
 	<true/>
+	<key>ClaudeCodeTriggersInstalled</key>
+	<true/>
+	<key>CodeReviewSavedPrompts</key>
+	<data>
+	W3sibmFtZSI6IkRlZmF1bHQiLCJ1dWlkIjoiMDJBMzNDM0EtMzgwNS00Rjg4LTlBMzkt
+	ODlDNkY1OEY1RDkyIiwidGV4dCI6IlJldmlldyB0aGUgcGVuZGluZyBjaGFuZ2VzIGlu
+	IHRoaXMgcmVwby4gRmxhZyBpc3N1ZXMgYSBjYXJlZnVsIG1haW50YWluZXIgd291bGQg
+	YmxvY2sgb24gYmVmb3JlIG1lcmdlLCBpbiByb3VnaGx5IHRoaXMgb3JkZXI6XG4gIDEu
+	IENvcnJlY3RuZXNzIOKAlCBsb2dpYyBlcnJvcnMsIGJyb2tlbiBpbnZhcmlhbnRzLCBt
+	aXNzZWQgZWRnZSBjYXNlcywgb2ZmLWJ5LW9uZSwgcmFjZXMsIGxpZmV0aW1lXC9tZW1v
+	cnkgYnVncywgZXJyb3IgcGF0aHMgdGhhdCBzd2FsbG93IGZhaWx1cmVzLlxuICAyLiBT
+	ZWN1cml0eSDigJQgaW5qZWN0aW9uLCBhdXRoblwvYXV0aHogbWlzdGFrZXMsIHNlY3Jl
+	dCBoYW5kbGluZywgdW5zYWZlIGRlc2VyaWFsaXphdGlvbiwgdW5zYWZlIGRlZmF1bHRz
+	LCBUT0NUT1UuXG4gIDMuIFJlbGlhYmlsaXR5ICYgcGVyZm9ybWFuY2Ug4oCUIGJsb2Nr
+	aW5nIHRoZSB3cm9uZyB0aHJlYWQsIHVuYm91bmRlZCByZXNvdXJjZSB1c2UsIGFjY2lk
+	ZW50YWwgTyhOwrIpLCByZXRyaWVzIHdpdGhvdXQgYmFja29mZiwgc2lsZW50IGZhaWx1
+	cmUgcGF0aHMuXG4gIDQuIENvbnRyYWN0IHJpc2sg4oCUIGJlaGF2aW9yIGNoYW5nZXMg
+	Y2FsbGVycyByZWx5IG9uLCBzaWxlbnRseSBjaGFuZ2VkIGRlZmF1bHRzLCBicm9rZW4g
+	YmFja3dhcmQgY29tcGF0aWJpbGl0eSwgbWlzc2luZyBtaWdyYXRpb25zLlxuXG5Gb3Ig
+	ZWFjaCBmaW5kaW5nIGNpdGUgYGZpbGU6bGluZWAsIGV4cGxhaW4gKndoeSogaXQgaXMg
+	d3JvbmcgKG5vdCB3aGF0IHRoZSBjb2RlIGRvZXMpLCBhbmQgcHJvcG9zZSBhIGNvbmNy
+	ZXRlIGZpeCB3aGVuIG9uZSBpcyBvYnZpb3VzLiBCZSBjYWxpYnJhdGVkOiBpZiBhIGZp
+	bmRpbmcgaXMgbm90IGhpZ2gtY29uZmlkZW5jZSwgc2F5IHNvIG9yIHNraXAgaXQuIFZl
+	cmlmeSBjbGFpbXMgYWdhaW5zdCB0aGUgYWN0dWFsIGNvZGUgcmF0aGVyIHRoYW4gaW5m
+	ZXJyaW5nIGZyb20gbmFtZXMuXG5cblNraXAgcHVyZSBzdHlsZSwgZm9ybWF0dGluZywg
+	bmFtaW5nLCBhbmQgYW55dGhpbmcgYSBsaW50ZXIgb3IgQ0kgYWxyZWFkeSBlbmZvcmNl
+	cy5cblxuSWYgeW91IGZpbmQgbm90aGluZyB3b3J0aCBmaXhpbmcsIHNheSBzbyBwbGFp
+	bmx5LiJ9XQ==
+	</data>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>Solarized Dark</key>
@@ -459,6 +488,8 @@
 	<string>E3023490-76F6-4FD4-9C6C-E3E8864B2925</string>
 	<key>Default Browser Profile Guid</key>
 	<string>44EE3364-94BE-4FE7-BFB9-F49522A32B54</string>
+	<key>EnableAPIServer</key>
+	<true/>
 	<key>FocusFollowsMouse</key>
 	<true/>
 	<key>HapticFeedbackForEsc</key>
@@ -479,6 +510,8 @@
 			<key>ASCII Anti Aliased</key>
 			<true/>
 			<key>ASCII Ligatures</key>
+			<false/>
+			<key>Allow Title Setting</key>
 			<false/>
 			<key>Ambiguous Double Width</key>
 			<false/>
@@ -832,6 +865,53 @@
 			<integer>512</integer>
 			<key>Transparency</key>
 			<real>0.0</real>
+			<key>Triggers</key>
+			<array>
+				<dict>
+					<key>action</key>
+					<string>iTermEnterWorkgroupTrigger</string>
+					<key>contentregex</key>
+					<string></string>
+					<key>disabled</key>
+					<false/>
+					<key>eventParams</key>
+					<dict>
+						<key>jobName</key>
+						<string>claude</string>
+					</dict>
+					<key>matchType</key>
+					<integer>113</integer>
+					<key>parameter</key>
+					<string>builtin.claudeCode</string>
+					<key>partial</key>
+					<false/>
+					<key>regex</key>
+					<string></string>
+				</dict>
+				<dict>
+					<key>action</key>
+					<string>iTermExitWorkgroupTrigger</string>
+					<key>contentregex</key>
+					<string></string>
+					<key>disabled</key>
+					<false/>
+					<key>eventParams</key>
+					<dict>
+						<key>jobName</key>
+						<string>claude</string>
+						<key>leaderOnly</key>
+						<true/>
+					</dict>
+					<key>matchType</key>
+					<integer>114</integer>
+					<key>parameter</key>
+					<string></string>
+					<key>partial</key>
+					<false/>
+					<key>regex</key>
+					<string></string>
+				</dict>
+			</array>
 			<key>Unicode Normalization</key>
 			<integer>0</integer>
 			<key>Unlimited Scrollback</key>
@@ -1283,6 +1363,53 @@
 			<integer>4</integer>
 			<key>Transparency</key>
 			<real>0.29999999999999999</real>
+			<key>Triggers</key>
+			<array>
+				<dict>
+					<key>action</key>
+					<string>iTermEnterWorkgroupTrigger</string>
+					<key>contentregex</key>
+					<string></string>
+					<key>disabled</key>
+					<false/>
+					<key>eventParams</key>
+					<dict>
+						<key>jobName</key>
+						<string>claude</string>
+					</dict>
+					<key>matchType</key>
+					<integer>113</integer>
+					<key>parameter</key>
+					<string>builtin.claudeCode</string>
+					<key>partial</key>
+					<false/>
+					<key>regex</key>
+					<string></string>
+				</dict>
+				<dict>
+					<key>action</key>
+					<string>iTermExitWorkgroupTrigger</string>
+					<key>contentregex</key>
+					<string></string>
+					<key>disabled</key>
+					<false/>
+					<key>eventParams</key>
+					<dict>
+						<key>jobName</key>
+						<string>claude</string>
+						<key>leaderOnly</key>
+						<true/>
+					</dict>
+					<key>matchType</key>
+					<integer>114</integer>
+					<key>parameter</key>
+					<string></string>
+					<key>partial</key>
+					<false/>
+					<key>regex</key>
+					<string></string>
+				</dict>
+			</array>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -1350,8 +1477,41 @@
 	<false/>
 	<key>SoundForEsc</key>
 	<false/>
+	<key>ToolbeltTools</key>
+	<array/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
+	<key>Workgroups</key>
+	<data>
+	W3sibmFtZSI6IkNsYXVkZSBDb2RlIiwidW5pcXVlSWRlbnRpZmllciI6ImJ1aWx0aW4u
+	Y2xhdWRlQ29kZSIsInNlc3Npb25zIjpbeyJ1cmxTdHJpbmciOiIiLCJraW5kIjp7Imtp
+	bmQiOiJyb290In0sImNvbW1hbmQiOiIiLCJ1bmlxdWVJZGVudGlmaWVyIjoiYnVpbHRp
+	bi5jbGF1ZGVDb2RlLm1haW4iLCJkaXNwbGF5TmFtZSI6IkNoYXQiLCJtb2RlIjoicmVn
+	dWxhciIsInRvb2xiYXJJdGVtcyI6W3sia2luZCI6Im1vZGVTd2l0Y2hlciJ9LHsia2lu
+	ZCI6ImdpdFN0YXR1cyJ9LHsia2luZCI6ImF1dG9SZXF1ZXN0UmV2aWV3V2hlbklkbGUi
+	fV0sInBlckZpbGVDb21tYW5kIjoiIn0seyJjb21tYW5kIjoiZ2l0IGRpZmZ0b29sIC15
+	IC14IHZpbWRpZmYgXFwoZ2l0QmFzZSkiLCJwZXJGaWxlQ29tbWFuZCI6ImdpdCBkaWZm
+	dG9vbCAteSAteCB2aW1kaWZmIFxcKGdpdEJhc2UpIC0tIFxcKGZpbGUpIiwidXJsU3Ry
+	aW5nIjoiIiwiZGlzcGxheU5hbWUiOiJEaWZmIiwidW5pcXVlSWRlbnRpZmllciI6ImJ1
+	aWx0aW4uY2xhdWRlQ29kZS5kaWZmIiwicGFyZW50SUQiOiJidWlsdGluLmNsYXVkZUNv
+	ZGUubWFpbiIsImtpbmQiOnsia2luZCI6InBlZXIifSwibW9kZSI6ImRpZmYiLCJ0b29s
+	YmFySXRlbXMiOlt7ImtpbmQiOiJtb2RlU3dpdGNoZXIifSx7ImtpbmQiOiJjaGFuZ2Vk
+	RmlsZVNlbGVjdG9yIn0seyJraW5kIjoiZ2l0QmFzZVNlbGVjdG9yIn0seyJraW5kIjoi
+	bmF2aWdhdGlvbiIsImJhY2tTaG9ydGN1dCI6eyJzZXJpYWxpemVkIjoiMHhmNzAyLTB4
+	MzQwMDAwLTB4N2IifSwicmVsb2FkU2hvcnRjdXQiOnsic2VyaWFsaXplZCI6IjB4NzIt
+	MHgxMDAwMDAtMHhmIn0sImZvcndhcmRTaG9ydGN1dCI6eyJzZXJpYWxpemVkIjoiMHhm
+	NzAzLTB4MzQwMDAwLTB4N2MifX1dfSx7ImNvbW1hbmQiOiJjbGF1ZGUgXFwoY29kZVJl
+	dmlld1Byb21wdCkgLS1hcHBlbmQtc3lzdGVtLXByb21wdC1maWxlICdcXChjb2RlUmV2
+	aWV3U3lzdGVtUHJvbXB0RmlsZSknIC0tc2V0dGluZ3MgJ1xcKGl0ZXJtMi5hcHBCdW5k
+	bGVQYXRoKVwvQ29udGVudHNcL1Jlc291cmNlc1wvY29kZS1yZXZpZXctc2V0dGluZ3Mu
+	dHh0JyIsInBlckZpbGVDb21tYW5kIjoiIiwiZGlzcGxheU5hbWUiOiJDb2RlIFJldmll
+	dyIsInVybFN0cmluZyI6IiIsInBhcmVudElEIjoiYnVpbHRpbi5jbGF1ZGVDb2RlLm1h
+	aW4iLCJ1bmlxdWVJZGVudGlmaWVyIjoiYnVpbHRpbi5jbGF1ZGVDb2RlLnJldmlldyIs
+	InRvb2xiYXJJdGVtcyI6W3sia2luZCI6Im1vZGVTd2l0Y2hlciJ9LHsic2hvcnRjdXQi
+	Onsic2VyaWFsaXplZCI6IjB4NzItMHgxMDAwMDAtMHhmIn0sImtpbmQiOiJyZWxvYWQi
+	fSx7ImtpbmQiOiJhdXRvU2VuZENsaXBwaW5nc1doZW5JZGxlIn1dLCJraW5kIjp7Imtp
+	bmQiOiJwZWVyIn0sIm1vZGUiOiJjb2RlUmV2aWV3In1dfV0=
+	</data>
 	<key>findMode_iTerm</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewPreferredModeKey</key>
