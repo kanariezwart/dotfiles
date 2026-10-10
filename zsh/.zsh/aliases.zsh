@@ -11,6 +11,15 @@ alias badge='tput bel'
 
 alias ff='find . -type f -name'
 
+# git log (the formats are git aliases in .gitconfig, so `git lg` etc. also
+# work outside zsh); names as in oh-my-zsh's git plugin
+alias lg='git lg'
+alias glog='git lg'
+alias gloga='git lga'
+alias glol='git ll'
+alias glola='git lla'
+alias glogg='git graph'
+
 # GNU ls flags; on macOS `ls` is aliased to gls in aliases-osx.zsh
 alias ls='ls --color=auto'
 alias ll='ls -lahGFN --group-directories-first'

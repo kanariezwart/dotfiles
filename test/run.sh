@@ -102,6 +102,7 @@ case "${1:-test}" in
     check /usr/bin/fzf 'whence -p fzf'
     check '"^R" fzf-history-widget' 'bindkey "^R"'
     check "ll='ls -lahGFN --group-directories-first'" 'alias ll'
+    check "lg='git lg'" 'alias lg'
     # no COLORTERM in the container, so vivid's 8-bit palette (38;5;…)
     # shellcheck disable=SC2016  # expands inside zsh, not here
     check vivid '[[ $LS_COLORS == *"38;5;"* ]] && echo vivid'
