@@ -1,4 +1,5 @@
 git/.gitconfig.local
+shell/.shell_env.local
 zsh/.zshrc.local
 .idea/workspace.xml
 *.zwc

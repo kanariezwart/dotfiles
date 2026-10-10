@@ -158,6 +158,7 @@ They are not committed (`.gitignore`), and each is loaded only if it exists:
 | File | Loaded by | For |
 |---|---|---|
 | `~/.gitconfig.local` | `~/.gitconfig` | email, signing key, GitHub user |
+| `~/.shell_env.local` | `~/.shell_env` | secrets (API tokens) and machine-specific environment variables |
 | `~/.zshrc.local` | `~/.zshrc` | machine-specific aliases, functions and plugins |
 | `~/.ssh/config.local` | `~/.ssh/config` (`make ssh` adds the `Include`) | SSH host definitions |
 

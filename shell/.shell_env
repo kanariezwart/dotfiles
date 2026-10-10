@@ -17,6 +17,11 @@ export EDITOR="nano"
 export DOTFILES="$HOME/Projects/system/dotfiles"
 
 # =============================================================================
+# Secrets / machine-local overrides (gitignored, not committed)
+# =============================================================================
+[[ -f "$HOME/.shell_env.local" ]] && source "$HOME/.shell_env.local"
+
+# =============================================================================
 # Go
 # =============================================================================
 export GOPATH="$HOME/Projects/golang"
@@ -51,9 +56,9 @@ unset _fzf_path
 # =============================================================================
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
-if [[ "$OSTYPE" == darwin* ]] && command -v brew &>/dev/null; then
-  # macOS – coreutils via Homebrew
-  _coreutils="$(brew --prefix coreutils 2>/dev/null)/libexec/gnubin"
+if [[ "$OSTYPE" == darwin* && -n "$USE_GNU_COREUTILS" ]]; then
+  # macOS – GNU coreutils unprefixed (opt-in; breaks some Homebrew source builds)
+  _coreutils="${HOMEBREW_PREFIX:-/usr/local}/opt/coreutils/libexec/gnubin"
   [[ -d "$_coreutils" ]] && export PATH="$_coreutils:$PATH"
   unset _coreutils
 fi
