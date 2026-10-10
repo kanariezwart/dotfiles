@@ -1,14 +1,22 @@
 # Development tools
 # Install with: brew bundle --file=install/Brewfile.dev
 
+# Taps
+tap "oven-sh/bun"
+
 # Languages & runtimes
 brew "go"
 brew "protobuf"
 brew "golangci-lint"
 
-
 brew "rbenv"
+brew "python@3.13"
+brew "rust"
+
+# javascript
+brew "node"
 brew "yarn"
+brew "oven-sh/bun/bun"
 
 # php
 brew "php"
@@ -20,19 +28,23 @@ brew "openjdk@21"
 brew "jenv"
 
 # Infrastructure
-brew "terraform"
-brew "docker"
-brew "docker-completion"
 brew "kubernetes-cli"
 brew "kubectx"
+brew "mintoolkit"
 
 # Testing & debugging
 brew "testssl"
 brew "wrk"
 brew "asciinema"
 brew "plantuml"
+brew "goaccess"
+brew "sftpgo"
+
+# Other
+brew "adr-tools"
+brew "oxvg"
 
 # Apps
-cask "postman"
+cask "docker-desktop"
 cask "charles"
 cask "ngrok"

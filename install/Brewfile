@@ -23,6 +23,27 @@ brew "jq"
 brew "rename"
 brew "tmux"
 brew "fortune"
+brew "bat"
+brew "entr"
+brew "fswatch"
+brew "fdupes"
+brew "p7zip"
+brew "gh"
+brew "mas"                            # Mac App Store CLI, for the mas entries below
+brew "shellcheck"
+
+# Network tools
+brew "telnet"
+brew "ngrep"
+
+# Media & documents
+brew "exiftool"
+brew "jhead"
+brew "imagemagick"
+brew "ffmpeg"
+brew "handbrake"
+brew "poppler"
+brew "gallery-dl"
 
 # Security
 brew "gnupg"
@@ -33,7 +54,6 @@ cask "font-meslo-for-powerlevel10k"   # MesloLGS NF, the font the iTerm2 profile
 
 # Browsers
 cask "firefox"
-cask "brave-browser"
 
 # Communication
 cask "signal"
@@ -42,7 +62,6 @@ cask "slack"
 # Productivity
 cask "flycut"
 cask "the-unarchiver"
-cask "bitwarden"
 cask "cleanmymac"
 cask "cleanmymac-cli"                 # `cleanmymac` / `cmm` command
 
@@ -57,8 +76,13 @@ cask "transmission"
 # Development
 cask "iterm2"
 cask "postman"
+cask "claude-code"
 
 # Utilities
 cask "coconutbattery"
 cask "suspicious-package"
 cask "apparency"
+cask "kextviewr"
+
+# Mac App Store apps (installed and updated by the App Store; needs a signed-in account)
+mas "Bitwarden", id: 1352778147
