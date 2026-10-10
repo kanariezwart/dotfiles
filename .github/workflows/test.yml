@@ -143,8 +143,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install stow
-        run: sudo apt-get install -y stow
-
-      - name: Test stow packages
-        run: make test
+      # stow + zsh startup in a vanilla ubuntu:24.04 container (see test/)
+      - name: Smoke test zsh in a vanilla container
+        run: make docker-test
