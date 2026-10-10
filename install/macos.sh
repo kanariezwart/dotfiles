@@ -44,9 +44,6 @@ defaults write com.apple.dock tilesize -int 43
 # Dock position
 defaults write com.apple.dock orientation -string "bottom"
 
-# Remove all default app icons from dock
-defaults write com.apple.dock persistent-apps -array
-
 # Speed up dock show/hide animation
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0.5
