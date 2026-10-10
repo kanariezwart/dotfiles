@@ -49,9 +49,11 @@ This will:
    fail (e.g. not signed in to the App Store), it warns and continues;
    rerun `make brew` afterwards
 4. Symlink the dotfiles into `~` via Stow
-5. Run the one-time setup (`make setup`): Screenshots folder, SSH folder with
-   a `~/.ssh/config.local` template included from `~/.ssh/config`, macOS
-   defaults and the iTerm2 configuration
+5. Run the one-time setup (`make setup`, safe to rerun): Screenshots folder,
+   SSH folder with a `~/.ssh/config.local` template included from
+   `~/.ssh/config`, timezone (Europe/Amsterdam, automatic), region and
+   languages, macOS defaults, and iTerm2 loading its settings from `iterm2/`
+   in this repo. Changing the timezone asks for your password
 
 ### After the bootstrap
 
@@ -86,16 +88,17 @@ git clone https://github.com/kanariezwart/dotfiles.git ~/Projects/system/dotfile
 cd ~/Projects/system/dotfiles
 make stow                 # symlink the dotfiles (move conflicting files like ~/.zshrc aside first)
 make linux                # tools from install/apt.txt (dig, curl, fzf)
-make ssh                  # SSH folder, ~/.ssh/config.local included from ~/.ssh/config
+make setup                # SSH folder + ~/.ssh/config.local, timezone, en_US.UTF-8 locale
 chsh -s "$(command -v zsh)"
 ```
 
-Then log out and in again. On minimal installs (servers, containers), also
-generate the locale that `.shell_env` sets, or the prompt symbols break:
-`sudo apt-get install -y locales && sudo locale-gen en_US.UTF-8`.
+Then log out and in again. The timezone and locale are set in the Makefile
+(`TIMEZONE`, `LOCALE`); override them per run, e.g.
+`make setup TIMEZONE=Europe/London`.
 
 The first zsh start clones zcomet and the plugins (~20s). `make docker-test`
-runs the same `make stow` + `make linux` steps in a clean Ubuntu container.
+runs the same `make stow` + `make linux` + `make setup` steps in a clean
+Ubuntu container and checks the result.
 
 ## Manual install (macOS)
 
@@ -129,11 +132,13 @@ make install
 | `make docker-test` | Smoke test zsh startup in a vanilla Linux container |
 | `make docker-shell` | Open zsh with these dotfiles in a vanilla Linux container |
 | `make update` | Pull latest changes and restow |
-| `make setup` | Run all one-time setup tasks |
+| `make setup` | Run all one-time setup tasks for this OS (safe to rerun) |
+| `make timezone` | Set the system timezone (`TIMEZONE`); automatic timezone on macOS |
+| `make locale` | Generate and set `LOCALE` on Linux; region and languages on macOS |
 | `make defaults` | Apply macOS system defaults |
-| `make iterm` | Import iTerm2 configuration |
+| `make iterm` | Let iTerm2 load and save its settings in `iterm2/` of this repo |
 | `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config |
-| `make screenshots` | Create Screenshots directory |
+| `make screenshots` | Save screenshots to `~/Documents/Screenshots` |
 
 ## Stow packages
 
