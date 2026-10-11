@@ -64,6 +64,10 @@ zcomet load ohmyzsh lib/key-bindings.zsh
 zcomet load ohmyzsh plugins/encode64
 zcomet load ohmyzsh plugins/extract
 zcomet load ohmyzsh plugins/gitfast
+# `git <Tab>` offers the git aliases from .gitconfig (lg, ll, graph, …) next to
+# the common commands. gitfast's default shows only the common commands and
+# falls back to aliases when none matches, so `git l<Tab>` completed to log.
+zstyle ':completion:*:*:git:*' tag-order 'common-commands alias-commands' all-commands
 
 # =============================================================================
 # Oh-my-zsh plugins lazy load

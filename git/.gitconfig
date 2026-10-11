@@ -16,7 +16,7 @@
   lga        = lg --all
   ll         = log --graph --pretty=tformat:'%C(red)%h%C(reset) -%C(auto)%d%C(reset) %s %C(green)(%ar) %C(bold blue)<%an>%C(reset)'
   lla        = ll --all
-  whois      = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+  whois      = "!sh -c 'git log -i -1 --pretty=\"tformat:%an <%ae>\" --author=\"$1\"' -"
   rmtag      = "!sh -c 'git tag -d $1; git push origin :refs/tags/$1'"
 
 [commit]
