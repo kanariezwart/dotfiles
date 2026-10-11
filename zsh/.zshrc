@@ -158,8 +158,18 @@ zcomet snippet ~/.zsh/aliases.zsh
 # don't leave stale dumps behind
 _zcompdir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 [[ -d "$_zcompdir" ]] || mkdir -p "$_zcompdir"
-zstyle ':zcomet:compinit' dump-file "$_zcompdir/zcompdump-$ZSH_VERSION"
-unset _zcompdir
+_zcompdump="$_zcompdir/zcompdump-$ZSH_VERSION"
+zstyle ':zcomet:compinit' dump-file "$_zcompdump"
+# The full compinit checks fpath for insecure directories (compaudit) and
+# rescans it for new completions: ~100ms. Do that once a day; in between, -C
+# loads the dump as is. New completions (brew install, a new plugin) show up
+# after the daily check, or right away after: rm ~/.cache/zsh/zcompdump-*
+_zcompfresh=("$_zcompdump"(N.mh-24))
+(( $#_zcompfresh )) && zstyle ':zcomet:compinit' arguments -C
 zcomet compinit
+# compinit only rewrites an unchanged dump when it's missing; touch it so
+# the next 24 hours use -C
+(( $#_zcompfresh )) || touch "$_zcompdump"
+unset _zcompdir _zcompdump _zcompfresh
 
 [[ -n "$ZPROF" ]] && zprof
