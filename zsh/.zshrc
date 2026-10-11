@@ -72,18 +72,20 @@ zcomet load ohmyzsh plugins/gitfast
 # falls back to aliases when none matches, so `git l<Tab>` completed to log.
 zstyle ':completion:*:*:git:*' tag-order 'common-commands alias-commands' all-commands
 
-# =============================================================================
-# Oh-my-zsh plugins lazy load
-# =============================================================================
-zcomet trigger gcloud ohmyzsh plugins/gcloud
-zcomet trigger go ohmyzsh plugins/golang
-zcomet trigger http ohmyzsh plugins/httpie
+# One ssh-agent shared by all shells (Linux; macOS has one per login session,
+# with keys from the Keychain). Keys aren't added at startup, as a passphrase
+# prompt would clash with the instant prompt: run ssh-add once, or set
+# AddKeysToAgent yes in ~/.ssh/config.
+if [[ "$OSTYPE" != darwin* ]] && (( $+commands[ssh-agent] )); then
+  zstyle :omz:plugins:ssh-agent agent-forwarding on
+  zstyle :omz:plugins:ssh-agent lazy yes
+  zstyle :omz:plugins:ssh-agent quiet yes
+  zcomet load ohmyzsh plugins/ssh-agent
+fi
 
-zstyle :omz:plugins:ssh-agent agent-forwarding on
-zcomet trigger ssh-add ohmyzsh plugins/ssh-agent
-zcomet trigger gpg ohmyzsh plugins/gpg-agent
-
-[[ "$OSTYPE" == darwin* ]] && zcomet load ohmyzsh plugins/macos
+# gpg asks for passphrases on this terminal when pinentry is a terminal
+# program (Linux); pinentry-mac doesn't need it
+export GPG_TTY=$TTY
 
 # =============================================================================
 # Other plugins
