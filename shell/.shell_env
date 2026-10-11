@@ -39,8 +39,12 @@ export GEM_HOME="$HOME/.gem"
 # =============================================================================
 # fzf – find path across package managers
 # =============================================================================
+# Homebrew links each formula at <prefix>/opt/<name>; checking the known
+# prefixes avoids running `brew --prefix fzf` (~150ms) in every shell
 for _fzf_path in \
-  "$(brew --prefix fzf 2>/dev/null)" \
+  ${HOMEBREW_PREFIX:+"$HOMEBREW_PREFIX/opt/fzf"} \
+  /opt/homebrew/opt/fzf \
+  /usr/local/opt/fzf \
   /usr/share/fzf \
   /usr/share/doc/fzf \
   /usr/local/share/fzf; do
