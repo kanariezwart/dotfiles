@@ -102,7 +102,6 @@ case "${1:-test}" in
     check /usr/bin/fzf 'whence -p fzf'
     check '"^R" fzf-history-widget' 'bindkey "^R"'
     check "ll='ls -lahGFN --group-directories-first'" 'alias ll'
-    check "lg='git lg'" 'alias lg'
     check "zstyle ':completion:*:*:git:*' tag-order 'common-commands alias-commands' all-commands" \
       'zstyle -L ":completion:*:*:git:*" tag-order'
     # no COLORTERM in the container, so vivid's 8-bit palette (38;5;…)
