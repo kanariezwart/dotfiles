@@ -99,6 +99,10 @@ zcomet load zsh-users/zsh-completions
 # Auto-suggestions
 zcomet load zsh-users/zsh-autosuggestions
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
+# Wrap the zle widgets once, at the first prompt (after all plugins and key
+# bindings below are loaded), instead of before every prompt: command lag
+# 34ms -> 10ms. Widgets defined later need: _zsh_autosuggest_bind_widgets
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 # fzf-tab configuration – must be set before loading fzf-tab
 zstyle ':completion:*:git-checkout:*' sort false
