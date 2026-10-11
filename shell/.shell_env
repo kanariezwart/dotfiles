@@ -28,9 +28,6 @@ export GOPATH="$HOME/Projects/golang"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
 
-# Let go determine its own root
-command -v go &>/dev/null && export GOROOT="$(go env GOROOT 2>/dev/null)"
-
 # =============================================================================
 # Ruby
 # =============================================================================
