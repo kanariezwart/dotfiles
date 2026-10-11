@@ -11,7 +11,7 @@ MAC_LANGUAGES := en-GB nl-NL
 
 .PHONY: help install brew dev linux brew-check \
         stow unstow update test setup defaults iterm ssh screenshots timezone locale \
-        docker-build docker-test docker-shell
+        docker-build docker-test docker-shell docker-bench bench profile
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -81,6 +81,21 @@ docker-test: docker-build ## Smoke test zsh startup in a vanilla Linux container
 docker-shell: docker-build ## Open zsh with these dotfiles in a vanilla Linux container
 	@# pass the terminal type through, otherwise docker uses TERM=xterm (8 colors)
 	docker run --rm -it -e TERM -e COLORTERM -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) shell
+
+docker-bench: docker-build ## Time zsh startup and profile it in a vanilla Linux container
+	docker run --rm -v "$(DOTFILES)":/src:ro $(DOCKER_IMAGE) bench
+
+# =============================================================================
+# Startup speed
+# =============================================================================
+ZSH_BENCH := $(HOME)/.cache/zsh-bench
+
+bench: ## Measure zsh startup and input latency (zsh-bench, fetched on first use)
+	@[[ -d "$(ZSH_BENCH)" ]] || git clone -q --depth 1 https://github.com/romkatv/zsh-bench "$(ZSH_BENCH)"
+	@"$(ZSH_BENCH)/zsh-bench"
+
+profile: ## Show where zsh startup time goes (zprof)
+	@ZPROF=1 zsh -i -c exit | head -25
 
 # =============================================================================
 # Maintenance

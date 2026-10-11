@@ -131,6 +131,9 @@ make install
 | `make test` | Simulate stow without modifying filesystem |
 | `make docker-test` | Smoke test zsh startup in a vanilla Linux container |
 | `make docker-shell` | Open zsh with these dotfiles in a vanilla Linux container |
+| `make docker-bench` | Time zsh startup and profile it in a vanilla Linux container |
+| `make bench` | Measure zsh startup and input latency ([zsh-bench](https://github.com/romkatv/zsh-bench), fetched on first use) |
+| `make profile` | Show where zsh startup time goes (zprof) |
 | `make update` | Pull latest changes and restow |
 | `make setup` | Run all one-time setup tasks for this OS (safe to rerun) |
 | `make timezone` | Set the system timezone (`TIMEZONE`); automatic timezone on macOS |

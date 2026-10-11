@@ -2,6 +2,7 @@
 # Entrypoint for the dotfiles test container.
 #   run-dotfiles test   stow the dotfiles and smoke test zsh startup
 #   run-dotfiles shell  stow the dotfiles and open an interactive login shell
+#   run-dotfiles bench  stow the dotfiles, time zsh startup and profile it
 #
 # Expects the repo mounted read-only at /src.
 set -euo pipefail
@@ -112,12 +113,23 @@ case "${1:-test}" in
     check 93.184.216.34 'dig() { printf "%s\\n" www.example.com. 93.184.216.34 "A 13 2 300 sig"; }; ip example.com'
     exit "$failed"
     ;;
+  bench)
+    # zsh-bench (make bench) hangs in this container, so time full startups
+    # instead; each in a pty like the tests, with a timeout against hangs
+    echo "→ Startup time: zsh -lic exit, average of 10 runs"
+    zsh -fc 'zmodload zsh/datetime; s=$EPOCHREALTIME
+      repeat 10 timeout 60 script -qec "zsh -lic exit" /dev/null </dev/null >/dev/null
+      printf "%.0f ms\n" $(( (EPOCHREALTIME - s) * 100 ))'
+    echo
+    echo "→ Where the time goes (make profile)"
+    timeout 60 script -qec "make -C '$dotfiles' --no-print-directory profile" /dev/null </dev/null | tr -d '\r'
+    ;;
   shell)
     echo "→ Starting zsh (type exit to leave)"
     exec zsh -l
     ;;
   *)
-    echo "usage: run-dotfiles [test|shell]" >&2
+    echo "usage: run-dotfiles [test|shell|bench]" >&2
     exit 2
     ;;
 esac

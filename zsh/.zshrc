@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Profile startup: ZPROF=1 zsh -i -c exit (or: make profile)
+[[ -n "$ZPROF" ]] && zmodload zsh/zprof
+
 # =============================================================================
 # P10k instant prompt – must be first
 # =============================================================================
@@ -158,3 +161,5 @@ _zcompdir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 zstyle ':zcomet:compinit' dump-file "$_zcompdir/zcompdump-$ZSH_VERSION"
 unset _zcompdir
 zcomet compinit
+
+[[ -n "$ZPROF" ]] && zprof
