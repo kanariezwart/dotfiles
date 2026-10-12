@@ -15,6 +15,7 @@ dotfiles/
 │   ├── Brewfile.dev      # development tools
 │   ├── apt.txt           # Linux (Debian/Ubuntu) packages
 │   └── macos.sh          # macOS system defaults
+├── docs/           # ssh-gpg.md: SSH and GPG on a new machine
 ├── install.sh      # bootstrap script for new machines
 ├── test/           # Docker test environment (vanilla Ubuntu)
 └── Makefile
@@ -66,6 +67,9 @@ This will:
 3. **Set up SSH:** add your key to `~/.ssh` and GitHub, put your hosts in
    `~/.ssh/config.local`, then switch the repo to SSH if you like:
    `git -C ~/Projects/system/dotfiles remote set-url origin git@github.com:kanariezwart/dotfiles.git`
+
+   Step by step for both, including moving your GPG key from an old machine:
+   [docs/ssh-gpg.md](docs/ssh-gpg.md).
 4. **Development machine?** Third-party taps must be trusted first
    (Homebrew 7), then install the dev tools:
    ```zsh
@@ -92,7 +96,8 @@ make setup                # SSH folder + ~/.ssh/config.local, timezone, en_US.UT
 chsh -s "$(command -v zsh)"
 ```
 
-Then log out and in again. The timezone and locale are set in the Makefile
+Then log out and in again, and set up your SSH and GPG keys
+([docs/ssh-gpg.md](docs/ssh-gpg.md)). The timezone and locale are set in the Makefile
 (`TIMEZONE`, `LOCALE`); override them per run, e.g.
 `make setup TIMEZONE=Europe/London`.
 
