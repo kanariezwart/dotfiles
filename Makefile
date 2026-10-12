@@ -161,7 +161,7 @@ screenshots: ## Save screenshots to ~/Documents/Screenshots
 	@defaults write com.apple.screencapture location -string "$(HOME)/Documents/Screenshots"
 	@echo "✓ Screenshots -> ~/Documents/Screenshots"
 
-ssh: ## Create SSH directory and config.local template, included from ~/.ssh/config
+ssh: ## Create SSH directory and config.local template, included from ~/.ssh/config; load keys on first use
 	@echo "Setting up SSH..."
 	@mkdir -p $(HOME)/.ssh && chmod 700 $(HOME)/.ssh
 	@if [[ ! -f "$(HOME)/.ssh/config.local" ]]; then \
@@ -179,6 +179,17 @@ ssh: ## Create SSH directory and config.local template, included from ~/.ssh/con
 		{ printf 'Include config.local\n\n'; if [ -f "$$cfg" ]; then cat "$$cfg"; fi; } > "$$cfg.tmp" \
 			&& chmod 600 "$$cfg.tmp" && mv "$$cfg.tmp" "$$cfg" \
 			&& echo "✓ Added 'Include config.local' to the top of ~/.ssh/config"; \
+	fi
+	@# Load keys into the agent on first use (passphrase once); on macOS also
+	@# store the passphrase in the Keychain. Appended: first match wins in ssh
+	@# config, so host-specific settings above still take precedence.
+	@cfg="$(HOME)/.ssh/config"; \
+	if grep -qiE '^[[:space:]]*AddKeysToAgent[[:space:]]' "$$cfg"; then \
+		echo "✓ ~/.ssh/config already sets AddKeysToAgent"; \
+	else \
+		if [[ "$$(uname -s)" == Darwin ]]; then keychain='  UseKeychain yes\n'; else keychain=; fi; \
+		printf "\nHost *\n  AddKeysToAgent yes\n$$keychain" >> "$$cfg" \
+			&& echo "✓ Added AddKeysToAgent to ~/.ssh/config"; \
 	fi
 
 defaults: ## Apply macOS system defaults (macOS only)

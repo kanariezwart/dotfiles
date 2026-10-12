@@ -8,6 +8,9 @@ bind9-dnsutils
 # curl – used by ip
 curl
 
+# ssh-agent – started by the ssh-agent plugin (.zshrc)
+openssh-client
+
 # fzf – used by fzf-tab and the ctrl-r / shift-down history search
 fzf
 

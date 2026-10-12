@@ -85,6 +85,8 @@ case "${1:-test}" in
     check_sh en_US.utf8 'locale -a | grep -ix en_US.utf8'
     check_sh LANG=en_US.UTF-8 'grep ^LANG= /etc/default/locale'
     check_sh 'Include config.local' 'head -1 ~/.ssh/config'
+    check_sh '  AddKeysToAgent yes' 'grep AddKeysToAgent ~/.ssh/config'
+    check_sh 0 'grep -c UseKeychain ~/.ssh/config'
     # shellcheck disable=SC2016  # expands in the checked shell, not here
     check_sh '600 600' 'echo $(stat -c %a ~/.ssh/config ~/.ssh/config.local)'
     # second run: every ✓ line reports "already" (nothing changed)
@@ -105,6 +107,14 @@ case "${1:-test}" in
     check "ll='ls -lahGFN --group-directories-first'" 'alias ll'
     check "zstyle ':completion:*:*:git:*' tag-order 'common-commands alias-commands' all-commands" \
       'zstyle -L ":completion:*:*:git:*" tag-order'
+    # one ssh-agent for all shells: a second shell reuses the first one's
+    # shellcheck disable=SC2016  # expands in the checked shell, not here
+    agent=$(in_zsh 'echo $SSH_AGENT_PID')
+    # shellcheck disable=SC2016
+    check "${agent:-<none>}" 'echo $SSH_AGENT_PID'
+    check "The agent has no identities." 'ssh-add -l'
+    # shellcheck disable=SC2016  # expands in the checked shell, not here
+    check yes '[[ $GPG_TTY == /dev/pts/* ]] && echo yes'
     # no COLORTERM in the container, so vivid's 8-bit palette (38;5;…)
     # shellcheck disable=SC2016  # expands inside zsh, not here
     check vivid '[[ $LS_COLORS == *"38;5;"* ]] && echo vivid'
