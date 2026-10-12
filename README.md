@@ -140,7 +140,7 @@ make install
 | `make locale` | Generate and set `LOCALE` on Linux; region and languages on macOS |
 | `make defaults` | Apply macOS system defaults |
 | `make iterm` | Let iTerm2 load and save its settings in `iterm2/` of this repo |
-| `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config |
+| `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config; load keys into the agent on first use (`AddKeysToAgent`) |
 | `make screenshots` | Save screenshots to `~/Documents/Screenshots` |
 
 ## Stow packages

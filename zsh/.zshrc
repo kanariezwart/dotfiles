@@ -74,8 +74,8 @@ zstyle ':completion:*:*:git:*' tag-order 'common-commands alias-commands' all-co
 
 # One ssh-agent shared by all shells (Linux; macOS has one per login session,
 # with keys from the Keychain). Keys aren't added at startup, as a passphrase
-# prompt would clash with the instant prompt: run ssh-add once, or set
-# AddKeysToAgent yes in ~/.ssh/config.
+# prompt would clash with the instant prompt; ssh adds them on first use
+# (AddKeysToAgent, set by make ssh).
 if [[ "$OSTYPE" != darwin* ]] && (( $+commands[ssh-agent] )); then
   zstyle :omz:plugins:ssh-agent agent-forwarding on
   zstyle :omz:plugins:ssh-agent lazy yes

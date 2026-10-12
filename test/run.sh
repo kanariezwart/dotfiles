@@ -85,6 +85,8 @@ case "${1:-test}" in
     check_sh en_US.utf8 'locale -a | grep -ix en_US.utf8'
     check_sh LANG=en_US.UTF-8 'grep ^LANG= /etc/default/locale'
     check_sh 'Include config.local' 'head -1 ~/.ssh/config'
+    check_sh '  AddKeysToAgent yes' 'grep AddKeysToAgent ~/.ssh/config'
+    check_sh 0 'grep -c UseKeychain ~/.ssh/config'
     # shellcheck disable=SC2016  # expands in the checked shell, not here
     check_sh '600 600' 'echo $(stat -c %a ~/.ssh/config ~/.ssh/config.local)'
     # second run: every ✓ line reports "already" (nothing changed)
