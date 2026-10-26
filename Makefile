@@ -9,7 +9,7 @@ LOCALE        := en_US.UTF-8
 MAC_REGION    := en_NL
 MAC_LANGUAGES := en-GB nl-NL
 
-.PHONY: help install brew dev tools linux brew-check \
+.PHONY: help install brew dev tools linux brew-check brew-pin \
         stow unstow update test setup defaults iterm ssh screenshots timezone locale \
         docker-build docker-test docker-shell docker-bench bench profile
 
@@ -38,6 +38,18 @@ brew-check: ## Show drift between installed Homebrew packages and the Brewfiles
 	listed=$$(for f in $$files; do brew bundle list --formula --cask --file=$$f; done | sort -u); \
 	{ brew leaves --installed-on-request; brew list --cask -1; } | sort -u \
 	  | comm -23 - <(echo "$$listed") | sed 's/^/  /'
+
+# Without bottles an upgrade of these rebuilds a large part of the tree:
+# icu4c and openssl are linked by node, openjdk, harfbuzz, poppler, …;
+# librsvg needs rust to build; graphviz and openjdk are what plantuml uses.
+BREW_PINS := librsvg graphviz icu4c@78 python@3.14 python@3.15 openjdk openssl@4
+
+brew-pin: ## Pin formulae whose source upgrade cascades (BREW_PINS); unpin with brew unpin
+	@for f in $(BREW_PINS); do \
+		if ! brew list --formula "$$f" >/dev/null 2>&1; then echo "- $$f not installed"; \
+		elif brew list --pinned | grep -qxF "$$f"; then echo "✓ $$f already pinned"; \
+		else brew pin "$$f" && echo "✓ $$f pinned"; fi; \
+	done
 
 CARGO_BIN := $(HOME)/.cargo/bin
 FNM_DIR   := $(HOME)/.local/share/fnm
