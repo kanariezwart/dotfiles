@@ -41,8 +41,9 @@ brew-check: ## Show drift between installed Homebrew packages and the Brewfiles
 
 # Without bottles an upgrade of these rebuilds a large part of the tree:
 # icu4c and openssl are linked by node, openjdk, harfbuzz, poppler, …;
-# librsvg needs rust to build; graphviz and openjdk are what plantuml uses.
-BREW_PINS := librsvg graphviz icu4c@78 python@3.14 python@3.15 openjdk openssl@4
+# librsvg needs rust to build; graphviz and openjdk are what plantuml uses;
+# a boost upgrade pulls in the next icu4c.
+BREW_PINS := librsvg graphviz icu4c@78 python@3.14 python@3.15 openjdk openssl@4 boost
 
 brew-pin: ## Pin formulae whose source upgrade cascades (BREW_PINS); unpin with brew unpin
 	@for f in $(BREW_PINS); do \
