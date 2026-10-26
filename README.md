@@ -13,6 +13,8 @@ dotfiles/
 ├── install/
 │   ├── Brewfile          # base packages and apps
 │   ├── Brewfile.dev      # development tools
+│   ├── cargo.txt         # Rust tools as prebuilt binaries (make tools)
+│   ├── pipx.txt          # Python tools via pipx (make tools)
 │   ├── apt.txt           # Linux (Debian/Ubuntu) packages
 │   └── macos.sh          # macOS system defaults
 ├── docs/           # ssh-gpg.md: SSH and GPG on a new machine
@@ -48,7 +50,10 @@ This will:
 2. Clone this repo to `~/Projects/system/dotfiles` (or the custom path) over HTTPS
 3. Install all packages and apps from `install/Brewfile`. If single entries
    fail (e.g. not signed in to the App Store), it warns and continues;
-   rerun `make brew` afterwards
+   rerun `make brew` afterwards. Then `make tools`: rustup, deno, node (fnm)
+   and the tools in `install/cargo.txt` and `install/pipx.txt` (bat, delta,
+   vivid, yt-dlp, …) as prebuilt binaries, which Homebrew would build from
+   source on a Mac it no longer supports
 4. Symlink the dotfiles into `~` via Stow
 5. Run the one-time setup (`make setup`, safe to rerun): Screenshots folder,
    SSH folder with a `~/.ssh/config.local` template included from
@@ -117,7 +122,8 @@ make install
 
 | Command | What it does |
 |---|---|
-| `update` | macOS software updates, Homebrew (formulae and casks) and zsh plugins |
+| `update` | macOS software updates, Homebrew (formulae and casks), the `make tools` installs and zsh plugins |
+| `update_tools` | Update rust, the cargo and pipx tools, deno and node (latest LTS) only |
 | `make update` | Pull the latest dotfiles and restow |
 | `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
 | `update_zcomet` | Update zsh plugins only |
@@ -130,6 +136,8 @@ make install
 | `make brew` | Install base packages from Brewfile |
 | `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
 | `make dev` | Install development tools from `Brewfile.dev` |
+| `make tools` | Install rustup, deno, node (fnm) and the tools in `install/cargo.txt` and `install/pipx.txt` as prebuilt binaries |
+| `make brew-pin` | Pin formulae whose source upgrade cascades into rebuilds (Mac without bottles) |
 | `make linux` | Install Linux packages from `install/apt.txt` (Debian/Ubuntu) |
 | `make stow` | Create symlinks only |
 | `make unstow` | Remove all symlinks |
