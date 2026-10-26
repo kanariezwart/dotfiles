@@ -5,11 +5,9 @@ brew "coreutils"
 brew "stow"
 brew "zsh"
 brew "fzf"
-brew "vivid"
 brew "git"
 brew "git-extras"
 brew "git-filter-repo"
-brew "git-delta"
 
 # Terminal tools
 brew "nano"
@@ -23,7 +21,6 @@ brew "jq"
 brew "rename"
 brew "tmux"
 brew "fortune"
-brew "bat"
 brew "entr"
 brew "fswatch"
 brew "fdupes"
@@ -31,6 +28,7 @@ brew "p7zip"
 brew "gh"
 brew "mas"                            # Mac App Store CLI, for the mas entries below
 brew "shellcheck"
+brew "pipx"                           # Python tools in install/pipx.txt (make tools)
 
 # Network tools
 brew "telnet"
@@ -43,7 +41,6 @@ brew "imagemagick"
 brew "ffmpeg"
 brew "handbrake"
 brew "poppler"
-brew "gallery-dl"
 
 # Security
 brew "gnupg"

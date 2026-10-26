@@ -4,17 +4,15 @@
 # Taps
 tap "oven-sh/bun"
 
-# Languages & runtimes
+# Languages & runtimes (rust, deno, node and the tools in install/cargo.txt:
+# make tools – Homebrew would build them from source)
 brew "go"
 brew "protobuf"
 brew "golangci-lint"
 
 brew "rbenv"
-brew "python@3.13"
-brew "rust"
 
-# javascript
-brew "node"
+# javascript (node: fnm, see make tools)
 brew "yarn"
 brew "oven-sh/bun/bun"
 
@@ -22,9 +20,7 @@ brew "oven-sh/bun/bun"
 brew "php"
 brew "composer"
 
-# java
-# LTS: 17, 21, 29 (2027)
-brew "openjdk@21"
+# java (openjdk comes with plantuml)
 brew "jenv"
 
 # Infrastructure
@@ -35,14 +31,12 @@ brew "mintoolkit"
 # Testing & debugging
 brew "testssl"
 brew "wrk"
-brew "asciinema"
 brew "plantuml"
 brew "goaccess"
 brew "sftpgo"
 
 # Other
 brew "adr-tools"
-brew "oxvg"
 
 # Apps
 cask "docker-desktop"

@@ -9,7 +9,7 @@ LOCALE        := en_US.UTF-8
 MAC_REGION    := en_NL
 MAC_LANGUAGES := en-GB nl-NL
 
-.PHONY: help install brew dev linux brew-check \
+.PHONY: help install brew dev tools linux brew-check brew-pin \
         stow unstow update test setup defaults iterm ssh screenshots timezone locale \
         docker-build docker-test docker-shell docker-bench bench profile
 
@@ -17,7 +17,7 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-install: brew stow setup ## Full install: brew packages, symlinks and one-time setup
+install: brew tools stow setup ## Full install: brew packages, tools, symlinks and one-time setup
 
 # =============================================================================
 # Packages
@@ -38,6 +38,38 @@ brew-check: ## Show drift between installed Homebrew packages and the Brewfiles
 	listed=$$(for f in $$files; do brew bundle list --formula --cask --file=$$f; done | sort -u); \
 	{ brew leaves --installed-on-request; brew list --cask -1; } | sort -u \
 	  | comm -23 - <(echo "$$listed") | sed 's/^/  /'
+
+# Without bottles an upgrade of these rebuilds a large part of the tree:
+# icu4c and openssl are linked by node, openjdk, harfbuzz, poppler, …;
+# librsvg needs rust to build; graphviz and openjdk are what plantuml uses.
+BREW_PINS := librsvg graphviz icu4c@78 python@3.14 python@3.15 openjdk openssl@4
+
+brew-pin: ## Pin formulae whose source upgrade cascades (BREW_PINS); unpin with brew unpin
+	@for f in $(BREW_PINS); do \
+		if ! brew list --formula "$$f" >/dev/null 2>&1; then echo "- $$f not installed"; \
+		elif brew list --pinned | grep -qxF "$$f"; then echo "✓ $$f already pinned"; \
+		else brew pin "$$f" && echo "✓ $$f pinned"; fi; \
+	done
+
+CARGO_BIN := $(HOME)/.cargo/bin
+FNM_DIR   := $(HOME)/.local/share/fnm
+
+# Prebuilt binaries from the projects themselves: Homebrew without bottles
+# builds these (or their build dependencies rust and llvm) from source.
+# Every installer runs with "don't touch my shell config"; .shell_env sets PATH.
+tools: ## Install rustup, cargo-binstall, deno, fnm + node LTS, and the tools in install/cargo.txt and install/pipx.txt
+	@[[ -x "$(CARGO_BIN)/rustup" ]] \
+		|| curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path --profile minimal
+	@[[ -x "$(CARGO_BIN)/cargo-binstall" ]] \
+		|| curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+	PATH="$(CARGO_BIN):$$PATH" cargo binstall --no-confirm $$(sed 's/#.*//' install/cargo.txt)
+	@# CI=1: skip the installer's shell setup (it edits .zshrc)
+	@[[ -x "$(HOME)/.deno/bin/deno" ]] \
+		|| curl -fsSL https://deno.land/install.sh | CI=1 sh
+	@[[ -x "$(FNM_DIR)/fnm" ]] \
+		|| curl -fsSL https://fnm.vercel.app/install | bash -s -- --force-no-brew --skip-shell --install-dir "$(FNM_DIR)"
+	"$(FNM_DIR)/fnm" install --lts && "$(FNM_DIR)/fnm" default lts-latest
+	for tool in $$(sed 's/#.*//' install/pipx.txt); do pipx install "$$tool"; done
 
 linux: ## Install Linux packages from install/apt.txt (Debian/Ubuntu)
 	sudo apt-get update

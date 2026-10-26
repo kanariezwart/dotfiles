@@ -112,15 +112,30 @@ function update_zcomet() {
   exec zsh
 }
 
-# Update Homebrew and all packages (macOS only)
+# Update Homebrew and all packages (macOS only). Without bottles every upgrade
+# builds from source: show what's coming, and build on 2 cores at the lowest
+# priority. Pinned formulae (make brew-pin) are left alone.
 function update_brew() {
-  brew update \
-    && brew upgrade -y --greedy \
+  brew update || return
+  brew outdated
+  HOMEBREW_MAKE_JOBS=2 nice -n 19 brew upgrade -y --greedy \
     && brew cleanup \
     && brew autoremove
 }
 
-# Full system update: macOS software + brew + zcomet
+# Update the tools from make tools: rust, cargo-binstall tools, deno, node, pipx tools
+function update_tools() {
+  if command -v rustup >/dev/null; then
+    rustup update
+    sed 's/#.*//' "$DOTFILES/install/cargo.txt" \
+      | xargs cargo binstall --no-confirm cargo-binstall
+  fi
+  command -v deno >/dev/null && deno upgrade
+  command -v fnm >/dev/null && fnm install --lts && fnm default lts-latest
+  command -v pipx >/dev/null && pipx upgrade-all
+}
+
+# Full system update: macOS software + brew + tools + zcomet
 function update() {
   # request sudo upfront and keep it alive
   sudo -v
@@ -131,6 +146,7 @@ function update() {
     sudo softwareupdate -i -a
     update_brew
   fi
+  update_tools
   # stop keep-alive before update_zcomet execs a new shell (same $$)
   kill "$keepalive" 2>/dev/null
   update_zcomet

@@ -64,6 +64,16 @@ if [[ "$OSTYPE" == darwin* && -n "$USE_GNU_COREUTILS" ]]; then
   unset _coreutils
 fi
 
+# Tools installed outside Homebrew (make tools): rustup/cargo, deno, fnm, pipx.
+# After /usr/local/bin, so they win over a leftover Homebrew copy.
+# node: fnm's default version directly, instead of `fnm env` (~13ms per shell);
+# that leaves out `fnm use`, which needs fnm env.
+for _dir in "$HOME/.local/bin" "$HOME/.local/share/fnm" "$HOME/.local/share/fnm/aliases/default/bin" \
+  "$HOME/.deno/bin" "$HOME/.cargo/bin"; do
+  [[ -d "$_dir" ]] && export PATH="$_dir:$PATH"
+done
+unset _dir
+
 # =============================================================================
 # shinies
 # =============================================================================

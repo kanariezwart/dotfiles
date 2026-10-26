@@ -1,0 +1,9 @@
+# Rust tools as prebuilt release binaries – install with: make tools
+# cargo-binstall downloads them; Homebrew would build them (and rust, llvm)
+# from source on a Mac it no longer supports.
+
+bat
+git-delta
+vivid
+asciinema
+oxvg

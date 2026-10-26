@@ -54,6 +54,9 @@ echo "Installing brew packages..."
 brew bundle --file=install/Brewfile \
   || echo "⚠ Some Brewfile entries failed – fix the cause and rerun: make brew"
 
+echo "Installing tools outside Homebrew (bat, delta, vivid, …)..."
+make tools || echo "⚠ make tools failed – fix the cause and rerun: make tools"
+
 echo "Creating symlinks..."
 for package in zsh git shell; do
   stow --target="$HOME" "$package"

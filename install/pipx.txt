@@ -1,0 +1,4 @@
+# Python tools from PyPI wheels (no rust build) – install with: make tools
+
+yt-dlp
+gallery-dl
