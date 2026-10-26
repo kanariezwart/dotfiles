@@ -31,7 +31,8 @@ dotfiles/
   Mac App Store via `mas`, which can't sign in for you.
 - Expect it to take a while: Homebrew, the Xcode Command Line Tools and all
   apps are downloaded. On an Intel Mac, Homebrew no longer ships prebuilt
-  packages, so some formulae are compiled from source.
+  packages, so some formulae are compiled from source (see
+  [Intel Mac: Homebrew without bottles](#intel-mac-homebrew-without-bottles)).
 
 ### Run the bootstrap
 
@@ -81,7 +82,9 @@ This will:
    brew trust oven-sh/bun
    make dev
    ```
-5. **Check the result:** `make brew-check` should only list things you
+5. **Intel Mac?** Pin the formulae whose upgrade would rebuild half the tree:
+   `make brew-pin`.
+6. **Check the result:** `make brew-check` should only list things you
    installed deliberately outside the Brewfiles.
 
 Some macOS defaults only take effect after logging out and in again.
@@ -123,6 +126,7 @@ make install
 | Command | What it does |
 |---|---|
 | `update` | macOS software updates, Homebrew (formulae and casks), the `make tools` installs and zsh plugins |
+| `update_brew` | Homebrew only: shows `brew outdated`, then upgrades on 2 cores at the lowest priority |
 | `update_tools` | Update rust, the cargo and pipx tools, deno and node (latest LTS) only |
 | `make update` | Pull the latest dotfiles and restow |
 | `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
@@ -132,7 +136,7 @@ make install
 
 | Command | Description |
 |---|---|
-| `make install` | Full install: brew packages, symlinks and one-time setup |
+| `make install` | Full install: brew packages, tools, symlinks and one-time setup |
 | `make brew` | Install base packages from Brewfile |
 | `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
 | `make dev` | Install development tools from `Brewfile.dev` |
@@ -155,6 +159,30 @@ make install
 | `make iterm` | Let iTerm2 load and save its settings in `iterm2/` of this repo |
 | `make ssh` | Create SSH directory and a config.local template, included from ~/.ssh/config; load keys into the agent on first use (`AddKeysToAgent`) |
 | `make screenshots` | Save screenshots to `~/Documents/Screenshots` |
+
+## Intel Mac: Homebrew without bottles
+
+Homebrew no longer builds bottles for macOS on Intel, so every upgrade is
+compiled from source. Two things keep that manageable:
+
+- **Tools outside Homebrew.** Formulae that need rust (and llvm) to build
+  come from the projects' own prebuilt binaries via `make tools`: bat, delta,
+  vivid, asciinema and oxvg through cargo-binstall (`install/cargo.txt`),
+  yt-dlp and gallery-dl through pipx (`install/pipx.txt`), plus deno, node
+  (fnm, latest LTS) and rustup itself. `.shell_env` puts their directories
+  before `/usr/local/bin`. Node is fnm's default version on PATH, not
+  `fnm env`, which would add ~13ms to every shell; `fnm use` doesn't work.
+- **Pins.** `make brew-pin` pins `BREW_PINS` in the Makefile: formulae whose
+  upgrade rebuilds a large part of the tree (icu4c, openssl, python), needs
+  rust (librsvg) or pulls in a new icu4c (boost). Formulae that need a newer
+  pinned dependency are then refused by `brew upgrade` (harfbuzz, plantuml,
+  tesseract); that's expected. Check what an update would build with
+  `brew upgrade --dry-run --greedy`, and unpin with `brew unpin <formula>`
+  when you do want the rebuild.
+
+To check that nothing installed would bring rust back:
+`brew uses --installed --include-build --recursive rust` should list only
+pinned formulae and what depends on them.
 
 ## Stow packages
 
