@@ -126,7 +126,7 @@ make install
 | Command | What it does |
 |---|---|
 | `update` | macOS software updates, Homebrew (formulae and casks), the `make tools` installs and zsh plugins |
-| `update_brew` | Homebrew only: shows `brew outdated`, then upgrades on 2 cores at the lowest priority |
+| `update_brew` | Homebrew only: shows `brew outdated`, then upgrades on 2 cores at the lowest priority, keeping the Mac awake |
 | `update_tools` | Update rust, the cargo and pipx tools, deno and node (latest LTS) only |
 | `make update` | Pull the latest dotfiles and restow |
 | `make brew-check` | Show drift between installed Homebrew packages and the Brewfiles |
